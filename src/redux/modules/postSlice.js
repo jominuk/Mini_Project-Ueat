@@ -23,7 +23,7 @@ export const __getPosts = createAsyncThunk(
   "GET_POST",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await axios.get("");
+      const { data } = await axios.get("http://sparta.goguma.online/posts");
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -42,7 +42,6 @@ const postSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    // //add
     // [__addPosts.pending]: (state) => {
     //   state.isLoading = true;
     // },
@@ -55,17 +54,17 @@ const postSlice = createSlice({
     //   state.error = action.payload;
     // },
     // //get
-    // [__getPosts.pending]: (state) => {
-    //   state.isLoading = true;
-    // },
-    // [__getPosts.fulfilled]: (state) => {
-    //   state.isLoading = false;
-    //   state.posts = action.payload;
-    // },
-    // [__getPosts.rejected]: (state) => {
-    //   state.isLoading = false;
-    //   state.error = action.payload;
-    // },
+    [__getPosts.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [__getPosts.fulfilled]: (state, action) => {
+      state.posts = action.payload;
+      state.isLoading = false;
+    },
+    [__getPosts.rejected]: (state, action) => {
+      state.error = action.payload;
+      state.isLoading = false;
+    },
   },
 });
 

@@ -1,15 +1,25 @@
 import React from "react";
 import styled from "styled-components";
+import { useState } from "react";
 
 const MainPostCard = () => {
+  const [input, setInput] = useState({
+    title: "",
+    contents: "",
+  });
+
   return (
     <>
       <div>
         <CardWrapper>
           <NicknameCarrier>nickname</NicknameCarrier>
           <ImageCarrier alt="" />
-          <TitleCarrier>Title</TitleCarrier>
-          <ContentCarrier>content</ContentCarrier>
+          <TitleCarrier type="text" name="title" value={input.title}>
+            Title
+          </TitleCarrier>
+          <ContentCarrier type="text" name="content" value={input.content}>
+            content
+          </ContentCarrier>
         </CardWrapper>
       </div>
     </>
