@@ -1,216 +1,200 @@
-import React from "react";
-import { useState } from "react";
-import Dropdown from "../components/Dropdown";
-import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { __addPosts } from "../redux/modules/postSlice";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import React, { useState } from "react";
+import styled from "styled-components";
+import { StyledButton } from "../components/Button";
+import { StyledImage } from "../components/Image";
+import { StyledInput } from "../components/Input";
 
-const CreatePost = () => {
-  const navigate = useNavigate();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dispatch = useDispatch();
-  const [input, setInput] = useState({
-    title: "",
-    contents: "",
-  });
-  const [image, setImage] = useState("");
+const Detail2 = () => {
+  const [image, setImage] = useState(null);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [Open, setOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
 
-  const seletMenu = () => {
-    setDropdownOpen(!dropdownOpen);
+  const selectMenu = () => setOpen(!Open);
+  const options = ["한식", "양식", "일식", "중식", "기타"];
+
+  const onOptionClicked = (value) => {
+    console.log(value);
+    setSelectedOption(value);
+    setOpen(false);
   };
-  const selectMenuOne = () => {
-    setDropdownOpen(false);
-  };
-  const selectMenuTwo = () => {
-    setDropdownOpen(false);
-  };
-
-  const onChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setInput({ ...input, [name]: value });
-  };
-
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    // if (input.title.length < 1 || input.title.length > 50) {
-    //   return alert("제목은 1~50자 이내로 😁");
-    // }
-    dispatch(
-      __addPosts({
-        id: "",
-        //카탈로그 업로드
-        title: input.title,
-        contents: input.contents,
-        // 사진 업로드
-      })
-    );
-
-    // navigate("/");
-  };
-
-  const handleImage = (e) => {
-    console.log(e.target.files);
-    setImage(e.target.files[0]);
-  };
-
-  const handleUpload = () => {
-    const formData = new FormData();
-    formData.append("image", image);
-    axios.post("url", formData).then((res) => {
-      console.log(res);
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
     });
   };
 
+  const handleImage = async (e) => {
+    const file = e.targe.files[0];
+    const base64 = await convertToBase64(file);
+    setImage(base64);
+    // const formData = new FormData();
+    // formData.append("image", file);
+    // const a = await axios.post(
+    //   "http://sparta.goguma.online/posts/images",
+    //   formData
+    // );
+    // console.log(a);
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const a = await axios.post("http://sparta.goguma.online/posts", {
+      title: "고양이",
+      content,
+      img: image,
+      categoryld: 0,
+    });
+    console.log(a);
+  };
   return (
-    <StDialog>
-      <form onSubmit={onSubmitHandler}>
-        <Dropdown />
-        <StPost>CreatePost </StPost>
-        <StCateg>Category : </StCateg>
-        <StfullDropdown>
-          <button onClick={seletMenu}>
-            {dropdownOpen ? (
-              <Dropdown visibility={dropdownOpen}>
-                <StMenu>
-                  <StBut onClick={(e) => selectMenuOne}> 한식 </StBut>
-                  <StBut onClick={(e) => selectMenuTwo}> 중식 </StBut>
-                </StMenu>
-              </Dropdown>
-            ) : null}
-            {dropdownOpen ? "Close" : "메뉴를 골라보자"}
-          </button>
-        </StfullDropdown>
-
-        <StTitle
-          type="text"
-          name="title"
-          value={input.title}
-          onChange={onChangeHandler}
-        >
-          Title :
-          <input />
-        </StTitle>
-        <StContents
-          type="text"
-          name="contents"
-          value={input.contents}
-          onChange={onChangeHandler}
-        >
-          Contents :
-          <input />
-        </StContents>
-
-        <div>
-          <input
-            type="file"
-            name="file"
-            accept="image/png"
-            onChange={handleImage}
+    <Main>
+      <Stdiv>
+        <h1>글 작성 페이지</h1>
+        <Stform onSubmit={onSubmit}>
+          <StDropDownContainer>
+            <StDropDownHeader onClick={selectMenu}>
+              {selectedOption || "Menu"}
+            </StDropDownHeader>
+            {Open && (
+              <StDropDownListContainer>
+                <StDropDownList>
+                  {options.map((option, i) => (
+                    <StListItem
+                      key={`options_${i}`}
+                      onClick={() => onOptionClicked(option)}
+                    >
+                      {option}
+                    </StListItem>
+                  ))}
+                </StDropDownList>
+              </StDropDownListContainer>
+            )}
+          </StDropDownContainer>
+          <StyledInput
+            type="text"
+            placeholder="title"
+            onChange={(e) => setTitle(e.target.value)}
           />
-          <br />
-
-          <StButtonGroup>
-            <StButton
-              borderColor="black"
-              width="70px"
-              height="50px"
-              onClick={() => navigate("/")}
-            >
-              Previous
-            </StButton>
-
-            <StButton
-              borderColor="black"
-              width="70px"
-              height="50px"
-              type="submit"
-              onChange={handleUpload}
-            >
-              Upload
-            </StButton>
-          </StButtonGroup>
-        </div>
-      </form>
-    </StDialog>
+          <StyledInput
+            type="text"
+            placeholder="content"
+            onChange={(e) => setContent(e.target.value)}
+          />
+          <Upload htmlFor="file">파일 업로드</Upload>{" "}
+          <div>
+            <StyledInput
+              type="file"
+              id="file"
+              onChange={handleImage}
+              style={{ display: "none" }}
+            />
+            <StyledImage src={image} />
+          </div>
+          <StyledButton>추가하기</StyledButton>
+        </Stform>
+      </Stdiv>
+    </Main>
   );
 };
 
-export default CreatePost;
+export default Detail2;
 
-const StDialog = styled.div`
-  border: 5px solid teal;
-  border-radius: 20px;
-  padding: 12px 24px 24px 24px;
-  width: 60%;
-  height: 600px;
-  margin: 130px auto 0px auto;
-  text-align: center;
-  list-style: none;
+const Stform = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 `;
 
-const StPost = styled.div`
-  font-size: 50px;
+const Stdiv = styled.div`
+  width: 700px;
+  height: 700px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  border-radius: 10px;
+  border: 3px solid #34495e;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 `;
 
-const StCateg = styled.div`
-  font-size: 25px;
-  margin: 20px;
+const StHead = styled.h1`
+  color: #34495e;
+  margin: 100px;
+  font-size: 40px;
 `;
 
-const StTitle = styled.div`
+const Main = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const ButtonArea = styled.div`
+  margin-top: 20px;
+  display: flex;
+  gap: 7px;
+`;
+
+const Upload = styled.label`
+  padding: 6px 25px;
+  background-color: #34495e;
+  border-radius: 4px;
+  color: white;
+  width: 80px;
+  cursor: pointer;
+  &:hover {
+    background-color: #2c3e50;
+  }
+`;
+
+const StDropDownContainer = styled.div`
+  width: 150px;
+  margin: 0 auto;
+`;
+
+const StDropDownHeader = styled.div`
+  margin-bottom: 5px;
+  padding: 4px 1px 4px 1px;
+  box-shadow: 0 5px 6px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
   font-size: 20px;
-  margin: 20px;
+  color: #3faffa;
+  border-radius: 15px;
 `;
 
-const StContents = styled.div`
-  font-size: 20px;
-  margin: 20px;
-`;
-
-const StfullDropdown = styled.div`
-  position: relative;
-`;
-
-const StMenu = styled.div`
+const StDropDownListContainer = styled.div`
   position: absolute;
-
-  margin: 25px 0;
-  padding: 0;
-
+  z-index: 100;
   width: 150px;
 `;
 
-const StBut = styled.div`
-  width: 100%;
-  height: 100%;
-  text-align: left;
-
-  background: powderblue;
-  color: blue;
-  border-radius: 10px;
-  padding: 5px;
-  margin: 5px;
-  font: inherit;
-  cursor: pointer;
+const StDropDownList = styled.div`
+  padding: 10px 0 0 0;
+  background: #ffffff;
+  border: 2px solid powderblue;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #3faffa;
+  font-size: 20px;
+  font-weight: 500;
 `;
 
-const StButtonGroup = styled.div`
-  width: 58%;
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  gap: 20px;
-  margin: 20px;
-`;
-
-const StButton = styled.button`
-  border: 2px solid blue;
-  font-size: 13px;
-  height: 30px;
-  width: 100px;
-  border-radius: 5px;
-  background-color: white;
+const StListItem = styled.div`
+  margin: 8px;
   cursor: pointer;
 `;
