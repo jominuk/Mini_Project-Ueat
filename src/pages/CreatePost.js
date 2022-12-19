@@ -34,16 +34,13 @@ const Detail2 = () => {
   };
 
   const handleImage = async (e) => {
-    const file = e.targe.files[0];
-    const base64 = await convertToBase64(file);
-    setImage(base64);
-    // const formData = new FormData();
-    // formData.append("image", file);
-    // const a = await axios.post(
-    //   "http://sparta.goguma.online/posts/images",
-    //   formData
-    // );
-    // console.log(a);
+    const formData = new FormData();
+    formData.append("image", file);
+    const a = await axios.post(
+      "http://sparta.goguma.online/posts/images",
+      formData
+    );
+    console.log(a);
   };
 
   const onSubmit = async (e) => {
