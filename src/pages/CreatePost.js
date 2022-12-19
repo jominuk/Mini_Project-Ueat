@@ -35,7 +35,7 @@ const Detail2 = () => {
 
   const handleImage = async (e) => {
     const formData = new FormData();
-    formData.append("image", file);
+    // formData.append("image", file);
     const a = await axios.post(
       "http://sparta.goguma.online/posts/images",
       formData
