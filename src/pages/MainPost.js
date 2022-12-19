@@ -1,8 +1,27 @@
 import React from "react";
 import styled from "styled-components";
 import MainPostCard from "../components/MainPostCard";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { __getPosts } from "../redux/modules/postSlice";
 
 const MainPost = () => {
+  const dispatch = useDispatch();
+  const a = useSelector((state) => state.post.posts.posts);
+  console.log("🚀 ~ file: MainPost.js:11 ~ MainPost ~ posts", a);
+
+  useEffect(() => {
+    dispatch(__getPosts());
+  }, [dispatch]);
+
+  // if (isLoading) {
+  //   return <div>로딩 중....</div>;
+  // }
+
+  // if (error) {
+  //   return <div>{error.message}</div>;
+  // }
+
   return (
     <>
       <WholeCard>
@@ -16,12 +35,13 @@ const MainPost = () => {
           <SigninButton>SignIn</SigninButton>
         </ButtonGroup>
         <MainCardWrapper>
+          {/* {posts?.map((post) => {}} */}
+          {/* <MainPostCard />
           <MainPostCard />
           <MainPostCard />
           <MainPostCard />
           <MainPostCard />
-          <MainPostCard />
-          <MainPostCard />
+          <MainPostCard /> */}
         </MainCardWrapper>
         <LeftHeader></LeftHeader>
       </WholeCard>
@@ -38,7 +58,7 @@ const LeftHeader = styled.div`
   background-position: center;
   position: absolute;
   top: 35vh;
-  left: -20vw;
+  left: -15vw;
   z-index: -1;
 `;
 const ButtonGroup = styled.div`
