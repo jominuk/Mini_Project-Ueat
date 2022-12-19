@@ -3,6 +3,10 @@ import styled from "styled-components";
 import { useState } from "react";
 
 const MainPostCard = () => {
+  console.log(
+    "🚀 ~ file: MainPostCard.js:6 ~ MainPostCard ~ MainPostCard",
+    MainPostCard
+  );
   const [input, setInput] = useState({
     title: "",
     contents: "",
