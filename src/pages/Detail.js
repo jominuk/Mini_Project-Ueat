@@ -17,7 +17,6 @@ const DetailPageLayout = styled.div`
   margin: 0 auto;
   min-height: 90vh;
   display: flex;
-  position: relative;
   flex-direction: column;
   align-items: center;
 `;
