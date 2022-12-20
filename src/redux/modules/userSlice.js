@@ -1,31 +1,54 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { instance } from "../../instance/instance";
+import { setCookie } from "../../shared/cookie";
 
-export const loginDB = (payload) => {
-  return async function (dispatch) {
-    dispatch(serverRequest(true));
+export const __loginUser = createAsyncThunk(
+  "LOGIN_USER",
+  async (payload, thunkAPI) => {
     try {
-      const login = await axios({
-        method: "post",
-        url: "http://3.39.25.179:8080/api/login",
-        data: {
-          username: payload.username,
-          password: payload.password,
-        },
-      });
-      const accessToken = login.headers.authorization.split(" ")[1];
-      setCookie("token", accessToken, {
+      const { data } = await instance.post("/auth/login", payload);
+      setCookie("token", data, {
         path: "/",
         expire: "after60m",
       });
-      dispatch(requestSuccess(true));
       alert("로그인 성공!");
-    } catch (error) {
-      dispatch(requestError(error));
+      return thunkAPI.fulfillWithValue(payload);
+    } catch ({ response }) {
       alert("아이디어와 비밀번호를 다시 확인해주세요.");
-    } finally {
-      dispatch(serverRequest(false)); // server request 종료
+      return thunkAPI.rejectWithValue(response);
     }
-  };
+  }
+);
+
+const initialState = {
+  email: "",
+  nickname: "",
+  login: false,
+  isLoading: false,
+  error: null,
+  errorMessage: "",
 };
+
+const userSlice = createSlice({
+  name: "LOGIN_USER",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(__loginUser.pending, (state) => {
+        console.log("팬딩");
+        state.isLoading = true;
+      })
+      .addCase(__loginUser.fulfilled, (state, action) => {
+        console.log("fulfilled");
+        state.isLoading = false;
+        state.login = true;
+      })
+      .addCase(__loginUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload.data.message;
+      });
+  },
+});
+
 export default userSlice.reducer;

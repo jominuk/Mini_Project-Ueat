@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { StyledButton } from "../components/Button";
 import { StyledInput } from "../components/Input";
-import InputWithLabel from "../components/InputWithLabel";
 
 const Signup = () => {
   return (
@@ -12,21 +11,19 @@ const Signup = () => {
         <Stdiv>
           <StHead>회원가입</StHead>
           <div>
+            <StyledInput placeholder="Email" width="300px" />
+            <StyledButton width="50px">확인</StyledButton>
+          </div>
+          <div>
             <StyledInput placeholder="Nickname" />
-            <StyledButton width="50px">확인</StyledButton>
           </div>
           <div>
-            <StyledInput placeholder="Email" />
-            <StyledButton width="50px">확인</StyledButton>
-          </div>
-          <div>
-            <StyledInput placeholder="Password" />
-            <StyledButton width="50px">확인</StyledButton>
+            <StyledInput placeholder="Password" type="password" />
           </div>
 
           <ButtonArea>
             <StyledButton>SignUp</StyledButton>
-            <StyledButton>SignIn</StyledButton>
+            <StyledButton>이전으로</StyledButton>
           </ButtonArea>
         </Stdiv>
       </Main>

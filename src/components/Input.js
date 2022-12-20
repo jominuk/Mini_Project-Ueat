@@ -11,6 +11,7 @@ export const StyledInput = styled.input`
   width: ${(props) => props.width || "350px"};
   outline: none;
   border: 1px solid #34495e;
+  font-weight: 700;
   ::placeholder {
     color: #34495e;
     opacity: 0.5;
