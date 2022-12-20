@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import MainPostCard from "../components/MainPostCard";
+// import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { __getPosts } from "../redux/modules/postSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const MainPost = () => {
   const navigate = useNavigate();
-
   return (
     <>
       <WholeCard>
@@ -26,6 +28,9 @@ const MainPost = () => {
           <SigninButton>SignIn</SigninButton>
         </ButtonGroup>
         <MainCardWrapper>
+          {/* {posts?.map((post) => {}} */}
+          {/* <MainPostCard />
+          <MainPostCard />
           {/* to={`/${post.id}`} key={post.id} */}
           <Link to="/detail/:id">
             <MainPostCard />
@@ -33,8 +38,7 @@ const MainPost = () => {
           <MainPostCard />
           <MainPostCard />
           <MainPostCard />
-          <MainPostCard />
-          <MainPostCard />
+          <MainPostCard /> */
         </MainCardWrapper>
         <LeftHeader></LeftHeader>
       </WholeCard>
@@ -51,7 +55,7 @@ const LeftHeader = styled.div`
   background-position: center;
   position: absolute;
   top: 35vh;
-  left: -20vw;
+  left: -15vw;
   z-index: -1;
 `;
 const ButtonGroup = styled.div`
