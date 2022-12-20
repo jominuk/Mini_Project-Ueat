@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import MainPostCard from "../components/MainPostCard";
 // import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { __getPosts } from "../redux/modules/postSlice";
+// import { useDispatch, useSelector } from "react-redux";
+// import { __getPosts } from "../redux/modules/postSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -36,9 +36,10 @@ const MainPost = () => {
             <MainPostCard />
           </Link>
           <MainPostCard />
+
+          {/* <MainPostCard />
           <MainPostCard />
-          <MainPostCard />
-          <MainPostCard /> */
+          <MainPostCard /> */}
         </MainCardWrapper>
         <LeftHeader></LeftHeader>
       </WholeCard>
