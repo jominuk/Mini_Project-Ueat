@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import MainPostCard from "../components/MainPostCard";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { __getPosts } from "../redux/modules/postSlice";
 
@@ -9,9 +9,9 @@ const MainPost = () => {
   const dispatch = useDispatch();
   const a = useSelector((state) => state.post.posts.posts);
 
-  useEffect(() => {
-    dispatch(__getPosts());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(__getPosts());
+  // }, [dispatch]);
 
   // if (isLoading) {
   //   return <div>로딩 중....</div>;
