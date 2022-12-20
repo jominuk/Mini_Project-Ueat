@@ -8,7 +8,6 @@ import { __getPosts } from "../redux/modules/postSlice";
 const MainPost = () => {
   const dispatch = useDispatch();
   const a = useSelector((state) => state.post.posts.posts);
-  console.log("🚀 ~ file: MainPost.js:11 ~ MainPost ~ posts", a);
 
   useEffect(() => {
     dispatch(__getPosts());
