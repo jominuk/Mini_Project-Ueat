@@ -1,7 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+// import { __deletePost } from "../redux/modules/postSlice";
+// import { useDispatch } from "react-redux";
 
 const DetailCard = () => {
+  // const dispatch = useDispatch();
+
+  // const DeleteButton = () => {
+  //   dispatch(__deletePost(id));
+  // };
+
   return (
     <>
       <div>
@@ -17,7 +25,11 @@ const DetailCard = () => {
         </DetailCardWrapper>
         <div>
           <DetailButtonEdit>Edit</DetailButtonEdit>
-          <DetailButtonDEL>Delete</DetailButtonDEL>
+          <DetailButtonDEL
+          // onClick={() => DeleteButton(post.id)}
+          >
+            Delete
+          </DetailButtonDEL>
         </div>
       </div>
     </>

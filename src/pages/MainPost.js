@@ -1,8 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import MainPostCard from "../components/MainPostCard";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const MainPost = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <WholeCard>
@@ -12,11 +16,20 @@ const MainPost = () => {
           <ButtonTop>일식</ButtonTop>
           <ButtonTop>양식</ButtonTop>
           <ButtonTop>기타</ButtonTop>
-          <WritePost>글쓰기</WritePost>
+          <WritePost
+            onClick={() => {
+              navigate("/post");
+            }}
+          >
+            글쓰기
+          </WritePost>
           <SigninButton>SignIn</SigninButton>
         </ButtonGroup>
         <MainCardWrapper>
-          <MainPostCard />
+          {/* to={`/${post.id}`} key={post.id} */}
+          <Link to="/detail/:id">
+            <MainPostCard />
+          </Link>
           <MainPostCard />
           <MainPostCard />
           <MainPostCard />
