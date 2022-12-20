@@ -1,11 +1,14 @@
-import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { StyledButton } from "../components/Button";
 import { StyledImage } from "../components/Image";
 import { StyledInput } from "../components/Input";
+import { __createPost } from "../redux/modules/postSlice";
 
-const Detail2 = () => {
+const CreatePost = () => {
+  const dispatch = useDispatch();
+  const [preview, setPreview] = useState(null);
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -13,54 +16,48 @@ const Detail2 = () => {
   const [selectedOption, setSelectedOption] = useState("");
 
   const selectMenu = () => setOpen(!Open);
-  const options = ["한식", "양식", "일식", "중식", "기타"];
+  const options = ["한식", "중식", "일식", "양식", "기타"];
 
   const onOptionClicked = (value) => {
-    console.log(value);
     setSelectedOption(value);
     setOpen(false);
   };
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
 
+  //파일업로드
   const handleImage = async (e) => {
-    const formData = new FormData();
-    // formData.append("image", file);
-    const a = await axios.post(
-      "http://sparta.goguma.online/posts/images",
-      formData
-    );
-    console.log(a);
+    setImage(e.target.files[0]);
+    setPreview(URL.createObjectURL(e.target.files[0]));
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const a = await axios.post("http://sparta.goguma.online/posts", {
-      title: "고양이",
-      content,
-      img: image,
-      categoryld: 0,
-    });
-    console.log(a);
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("categoryId", options.indexOf(selectedOption));
+    for (let key of formData.keys()) {
+      console.log(key);
+    }
+    dispatch(__createPost(formData));
+
+    // result.status ===200 ?
+    // alert("작성완료!")
   };
+
+  const onClick = () => {
+    dispatch(__createPost({ email: "boxman2@naver.com" }));
+  };
+
   return (
     <Main>
+      <button onClick={onClick}>크ㄹ릭</button>
       <Stdiv>
         <h1>글 작성 페이지</h1>
         <Stform onSubmit={onSubmit}>
           <StDropDownContainer>
             <StDropDownHeader onClick={selectMenu}>
-              {selectedOption || "Menu"}
+              {selectedOption || "메뉴선택"}
             </StDropDownHeader>
             {Open && (
               <StDropDownListContainer>
@@ -79,12 +76,12 @@ const Detail2 = () => {
           </StDropDownContainer>
           <StyledInput
             type="text"
-            placeholder="title"
+            placeholder="제목"
             onChange={(e) => setTitle(e.target.value)}
           />
           <StyledInput
             type="text"
-            placeholder="content"
+            placeholder="내용"
             onChange={(e) => setContent(e.target.value)}
           />
           <Upload htmlFor="file">파일 업로드</Upload>{" "}
@@ -95,7 +92,7 @@ const Detail2 = () => {
               onChange={handleImage}
               style={{ display: "none" }}
             />
-            <StyledImage src={image} />
+            <StyledImage src={preview} />
           </div>
           <StyledButton>추가하기</StyledButton>
         </Stform>
@@ -104,7 +101,7 @@ const Detail2 = () => {
   );
 };
 
-export default Detail2;
+export default CreatePost;
 
 const Stform = styled.form`
   display: flex;
@@ -128,23 +125,11 @@ const Stdiv = styled.div`
   gap: 10px;
 `;
 
-const StHead = styled.h1`
-  color: #34495e;
-  margin: 100px;
-  font-size: 40px;
-`;
-
 const Main = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-`;
-
-const ButtonArea = styled.div`
-  margin-top: 20px;
-  display: flex;
-  gap: 7px;
 `;
 
 const Upload = styled.label`
@@ -167,11 +152,11 @@ const StDropDownContainer = styled.div`
 const StDropDownHeader = styled.div`
   margin-bottom: 5px;
   padding: 4px 1px 4px 1px;
-  box-shadow: 0 5px 6px rgba(0, 0, 0, 0.15);
   font-weight: 500;
   font-size: 20px;
-  color: #3faffa;
-  border-radius: 15px;
+  color: #34495e;
+  border-radius: 3px;
+  border: 2px solid #34495e;
 `;
 
 const StDropDownListContainer = styled.div`
@@ -183,10 +168,10 @@ const StDropDownListContainer = styled.div`
 const StDropDownList = styled.div`
   padding: 10px 0 0 0;
   background: #ffffff;
-  border: 2px solid powderblue;
+  border: 2px solid gray;
   border-radius: 15px;
   box-sizing: border-box;
-  color: #3faffa;
+  color: #34495e;
   font-size: 20px;
   font-weight: 500;
 `;

@@ -1,29 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { instance } from "../../instance/instance";
 
-export const __addPosts = createAsyncThunk(
-  "ADD_POST",
-  async (payload, thunkAPI) => {
+export const __getPost = createAsyncThunk(
+  "GET_POST",
+  async ({ categoryId }, thunkAPI) => {
     try {
-      await axios.post("", payload, {
-        url: "",
-        method: "POST",
-        headers: {
-          authorization: "token",
-        },
-      });
-      return thunkAPI.fulfillWithValue(payload);
+      const { data } = await instance.get(`/posts?${categoryId}&page`);
+      return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
-export const __getPosts = createAsyncThunk(
-  "GET_POST",
+export const __createPost = createAsyncThunk(
+  "CREATE_POST",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await axios.get("http://sparta.goguma.online/posts");
+      console.log(payload);
+      const { data } = await instance.post("/auth/register/check-id", payload);
+      console.log(data);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -32,39 +28,38 @@ export const __getPosts = createAsyncThunk(
 );
 
 const initialState = {
-  posts: [],
+  postList: [],
+  post: {},
   isLoading: false,
-  error: null,
 };
 
 const postSlice = createSlice({
-  name: "posts",
+  name: "POST_SLICE",
   initialState,
   reducers: {},
-  extraReducers: {
-    // [__addPosts.pending]: (state) => {
-    //   state.isLoading = true;
-    // },
-    // [__addPosts.fulfilled]: (state, action) => {
-    //   state.isLoading = false;
-    //   state.posts = [...state.posts, action.payload];
-    // },
-    // [__addPosts.rejected]: (state, action) => {
-    //   state.isLoading = false;
-    //   state.error = action.payload;
-    // },
-    // //get
-    [__getPosts.pending]: (state) => {
-      state.isLoading = true;
-    },
-    [__getPosts.fulfilled]: (state, action) => {
-      state.posts = action.payload;
-      state.isLoading = false;
-    },
-    [__getPosts.rejected]: (state, action) => {
-      state.error = action.payload;
-      state.isLoading = false;
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(__getPost.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(__getPost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.postList = action.payload.posts;
+      })
+      .addCase(__getPost.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(__createPost.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(__createPost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.post = action.payload;
+      })
+      .addCase(__createPost.rejected, (state) => {
+        state.isLoading = true;
+      });
   },
 });
 
