@@ -73,7 +73,6 @@ const StLink = styled(Link)`
 `;
 
 const StLog = styled.div`
-  display: flex;
   font-size: 50px;
   position: absolute;
   justify-content: flex-end;
@@ -91,6 +90,6 @@ const StSelect = styled.div`
   font-size: 30px;
   display: flex;
   justify-content: flex-end;
-  padding: 0 300px 0 0;
+  padding: 0 400px 0 0;
   font: small-caps bold 24px/1 sans-serif;
 `;

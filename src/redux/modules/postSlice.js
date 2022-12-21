@@ -44,7 +44,7 @@ export const __deletePost = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
-      await instance.delete("/posts/47");
+      await instance.delete(`/posts/${payload}`);
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -52,34 +52,34 @@ export const __deletePost = createAsyncThunk(
   }
 );
 
-// // 수정
-// export const __editPost = createAsyncThunk(
-//   "EDIT_POST",
-//   async (payload, thunkAPI) => {
-//     try {
-//       const edited = await instance.patch(`/posts/47`, {
-//         title: payload.title,
-//         content: payload.content,
-//       });
-//       return thunkAPI.fulfillWithValue(edited.data);
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error);
-//     }
-//   }
-// );
+// 수정
+export const __editPost = createAsyncThunk(
+  "EDIT_POST",
+  async (payload, thunkAPI) => {
+    try {
+      const edited = await instance.patch(`/posts/47`, {
+        title: payload.title,
+        content: payload.content,
+      });
+      return thunkAPI.fulfillWithValue(edited.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
-// //like
-// export const __likeHeart = createAsyncThunk(
-//   "LIKE_HEART",
-//   async (payload, thunkAPI) => {
-//     try {
-//       const like = await instance.post(`post/`)
-//       return thunkAPI.fulfillWithValue(like.data)
-//     }catch (error) {
-//       return thunkAPI.rejectWithValue(error)
-//     }
-//   }
-// )
+//like
+export const __likeHeart = createAsyncThunk(
+  "LIKE_HEART",
+  async (payload, thunkAPI) => {
+    try {
+      const like = await instance.post(`post/`);
+      return thunkAPI.fulfillWithValue(like.data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 const initialState = {
   postList: [],
@@ -87,8 +87,6 @@ const initialState = {
   isLoading: false,
   like: false,
 };
-// 데이터 받ㅇ느걸로 리듀서에 넣어줘서 post안에 넣어준다.
-// 그럼 홈페이지 실행될때
 const postSlice = createSlice({
   name: "POST_SLICE",
   initialState,
@@ -142,34 +140,34 @@ const postSlice = createSlice({
       .addCase(__deletePost.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
+      })
+
+      // 게시물 수정
+      .addCase(__editPost.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(__editPost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.post = state.post.map((user) =>
+          user.id === action.payload.id ? action.payload : user
+        );
+      })
+      .addCase(__editPost.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+
+      // like
+      .addCase(__likeHeart.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(__likeHeart.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(__likeHeart.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
-
-    // // 게시물 수정
-    // .addCase(__editPost.pending, (state) => {
-    //   state.isLoading = true;
-    // })
-    // .addCase(__editPost.fulfilled, (state, action) => {
-    //   state.isLoading = false;
-    //   state.post = state.post.map((user) =>
-    //     user.id === action.payload.id ? action.payload : user
-    //   );
-    // })
-    // .addCase(__editPost.rejected, (state, action) => {
-    //   state.isLoading = false;
-    //   state.error = action.payload;
-    // });
-
-    // // like
-    // .addCase(__likeHeart.pending, (state) => {
-    //   state.isLoading = true
-    // })
-    // .addCase(__likeHeart.fulfilled, (state) =>{
-    //   state.isLoading = false
-    // })
-    // .addCase(__likeHeart.rejected, (state) => {
-    //   state.isLoading = false
-    //   state.error = action.payload
-    // })
   },
 });
 

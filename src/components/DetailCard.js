@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-// import { __deletePost, __editPost } from "../redux/modules/postSlice";
-import { __createGet, __deletePost } from "../redux/modules/postSlice";
+import {
+  __createGet,
+  __deletePost,
+  __editPost,
+} from "../redux/modules/postSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Comment from "./Comment";
@@ -14,15 +17,13 @@ const DetailCard = () => {
 
   const { post } = useSelector((state) => state.post);
 
-  // const [editOn, setEditOn] = useState("");
-  // // edit.id랑 비교 후 input창 바꾸기(수정버튼 클릭 시 editOn으로 들어옴)
-  // const [input, setInput] = useState("");
+  const [editOn, setEditOn] = useState("");
+  const [input, setInput] = useState("");
 
-  // //수정완료버튼
-  // const onEditComplete = () => {
-  //   dispatch(__editPost(editOn));
-  //   setEditOn("");
-  // };
+  const onEditComplete = () => {
+    dispatch(__editPost());
+    setEditOn("");
+  };
 
   const DeleteButton = () => {
     dispatch(__deletePost(47));
@@ -32,7 +33,7 @@ const DetailCard = () => {
     dispatch(__createGet());
   }, []);
 
-  return (
+  return "47" === editOn ? (
     <>
       <div>
         <div>
@@ -53,11 +54,68 @@ const DetailCard = () => {
 
           <HeartButton />
 
-          <DetailTitleCarrier>{post?.title}</DetailTitleCarrier>
-          <DetailContentCarrier>{post?.content}</DetailContentCarrier>
+          <DetailTitleCarrier
+            onChange={(e) => setInput(e.target.value)}
+            value={input}
+          />
+          <DetailContentCarrier
+            onChange={(e) => setInput(e.target.value)}
+            value={input}
+          />
         </DetailCardWrapper>
         <div>
-          <DetailButtonEdit> Edit </DetailButtonEdit>
+          <DetailButtonEdit onClick={() => onEditComplete(47)}>
+            {" "}
+            completion{" "}
+          </DetailButtonEdit>
+          <DetailButtonDEL onClick={() => setEditOn("")}>
+            {" "}
+            Cancel{" "}
+          </DetailButtonDEL>
+        </div>
+      </div>
+      <Comment />
+    </>
+  ) : (
+    <>
+      <div>
+        <div>
+          <DetailButtonTop onClick={() => navigate("/main")}>
+            back
+          </DetailButtonTop>
+          <DetailButtonTop2 onClick={() => navigate("/log")}>
+            signin
+          </DetailButtonTop2>
+        </div>
+        <DetailCardWrapper>
+          <DetailNicknameCarrier>
+            <div> nickname </div>
+            <div> {post?.postId} </div>
+          </DetailNicknameCarrier>
+
+          <DetailImageCarrier alt="" />
+
+          <HeartButton />
+
+          <DetailTitleCarrier
+            onChange={(e) => setInput(e.target.value)}
+            value={input}
+          />
+          <DetailContentCarrier
+            onChange={(e) => setInput(e.target.value)}
+            value={input}
+          />
+        </DetailCardWrapper>
+        <div>
+          <DetailButtonEdit
+            onClick={() => {
+              setEditOn();
+              setInput();
+            }}
+          >
+            {" "}
+            Edit{" "}
+          </DetailButtonEdit>
           <DetailButtonDEL onClick={() => DeleteButton()}>
             {" "}
             Delete{" "}
