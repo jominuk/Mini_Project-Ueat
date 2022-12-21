@@ -66,7 +66,9 @@ const StLink = styled(Link)`
   margin: 50px 0 0 50px;
   color: white;
   :hover {
-    transform: scale(1.3);
+    transform: scale(1.4);
+    color: red;
+    transition: all 0.25s;
   }
 `;
 
@@ -78,7 +80,9 @@ const StLog = styled.div`
   overflow: hidden;
   cursor: pointer;
   :hover {
-    transform: scale(1.3);
+    transform: scale(1.4);
+    color: white;
+    transition: all 0.25s;
   }
 `;
 
