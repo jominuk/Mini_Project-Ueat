@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instance } from "../../instance/instance";
+import setToken from "../../Pattern/setToken";
+import { getCookie } from "../../shared/cookie";
 
 export const __getPost = createAsyncThunk(
   "GET_POST",
@@ -17,7 +19,8 @@ export const __createPost = createAsyncThunk(
   "CREATE_POST",
   async (payload, thunkAPI) => {
     try {
-      console.log(payload);
+      const accessToken = getCookie("token");
+      setToken(accessToken);
       const { data } = await instance.post("/posts", payload);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
@@ -26,11 +29,12 @@ export const __createPost = createAsyncThunk(
   }
 );
 
+//게시물 하나만 받아오기
 export const __createGet = createAsyncThunk(
   "CREATE_GET",
   async (payload, thunkAPI) => {
     try {
-      const { data } = await instance.get("/posts/47");
+      const { data } = await instance.get(`/posts/${payload}`);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -44,6 +48,8 @@ export const __deletePost = createAsyncThunk(
   async (payload, thunkAPI) => {
     console.log(payload);
     try {
+      const accessToken = getCookie("token");
+      setToken(accessToken);
       await instance.delete(`/posts/${payload}`);
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
@@ -57,7 +63,9 @@ export const __editPost = createAsyncThunk(
   "EDIT_POST",
   async (payload, thunkAPI) => {
     try {
-      const edited = await instance.patch(`/posts/47`, {
+      const accessToken = getCookie("token");
+      setToken(accessToken);
+      const edited = await instance.patch(`/posts/`, {
         title: payload.title,
         content: payload.content,
       });
