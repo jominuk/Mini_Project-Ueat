@@ -45,7 +45,7 @@ const CreatePost = () => {
     const a = await dispatch(__createPost(formData));
     if (a.payload.message === "작성 완료") {
       alert("작성 완료");
-      navigate("/main");
+      navigate("/main/0");
     }
 
     // result.status ===200 ?

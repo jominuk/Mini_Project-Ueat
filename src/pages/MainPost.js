@@ -1,20 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import MainPostCard from "../components/MainPostCard";
 // import { useState, useEffect } from "react";
 // import { useDispatch, useSelector } from "react-redux";
 // import { __getPosts } from "../redux/modules/postSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCookie } from "../shared/cookie";
 import { loginCheck } from "../redux/modules/userSlice";
+import { __getPost } from "../redux/modules/postSlice";
 const MainPost = () => {
+  const { number } = useParams();
+  useEffect(() => {
+    __getPost(number);
+  }, []);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { login } = useSelector((state) => state.user);
-
-  let menuList = [];
 
   const logoutButton = () => {
     const a = dispatch(loginCheck(false));
@@ -125,6 +129,7 @@ const SigninButton = styled.button`
   margin: 10px 0 0 1000px;
   position: absolute;
   font-size: 15px;
+  border-color: grey;
   border-radius: 12px;
   :hover {
     border: 1px solid black;
