@@ -3,35 +3,62 @@ import logo from "../img/logo.png";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { StyledButton } from "../components/Button";
+import { loginCheck } from "../redux/modules/userSlice";
+import { deleteCookie } from "../shared/cookie";
 
 const Home = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { login } = useSelector((state) => state.user);
+  console.log(login);
+
+  const onLogout = () => {
+    const a = dispatch(loginCheck(false));
+    if (a.payload === false) deleteCookie("token");
+  };
+
   return (
     <Stdiv>
-      <StLog
-        onClick={() => {
-          navigate("log");
-        }}
-      >
-        login
-      </StLog>
+      <Left>
+        {login ? (
+          <StyledButton
+            onClick={onLogout}
+            background="transparent"
+            fontWeight="800"
+            fontSize="25px"
+          >
+            LOGOUT
+          </StyledButton>
+        ) : (
+          <StyledButton
+            onClick={() => navigate("/log")}
+            background="transparent"
+            fontWeight="800"
+            fontSize="25px"
+          >
+            LOGIN
+          </StyledButton>
+        )}
+      </Left>
       <StImg>
         <img alt="logo" src={logo} />
       </StImg>
       <StSelect>
-        <StLink to="/main">
+        <StLink to="/main/0">
           <div> 한식 </div>
         </StLink>
-        <StLink to="/main">
-          <div> 일식 </div>
-        </StLink>
-        <StLink to="/main">
-          <div> 양식 </div>
-        </StLink>
-        <StLink to="/main">
+        <StLink to="/main/1">
           <div> 중식 </div>
         </StLink>
-        <StLink to="/main">
+        <StLink to="/main/2">
+          <div> 일식 </div>
+        </StLink>
+        <StLink to="/main/3">
+          <div> 양식 </div>
+        </StLink>
+        <StLink to="/main/4">
           <div> 기타 </div>
         </StLink>
       </StSelect>
@@ -40,6 +67,11 @@ const Home = () => {
 };
 
 export default Home;
+
+const Left = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
 
 const Stdiv = styled.div`
   background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
@@ -68,20 +100,6 @@ const StLink = styled(Link)`
   :hover {
     transform: scale(1.4);
     color: red;
-    transition: all 0.25s;
-  }
-`;
-
-const StLog = styled.div`
-  font-size: 50px;
-  position: absolute;
-  justify-content: flex-end;
-  margin: 30px 0 0 1770px;
-  overflow: hidden;
-  cursor: pointer;
-  :hover {
-    transform: scale(1.4);
-    color: white;
     transition: all 0.25s;
   }
 `;

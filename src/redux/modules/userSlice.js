@@ -36,7 +36,6 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     loginCheck: (state, action) => {
-      console.log("로그인체크");
       state.login = action.payload;
     },
   },

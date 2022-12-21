@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import MainPostCard from "../components/MainPostCard";
-import { useNavigate } from "react-router-dom";
+// import { useState, useEffect } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { __getPosts } from "../redux/modules/postSlice";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCookie } from "../shared/cookie";
+import { deleteCookie, getCookie } from "../shared/cookie";
 import { loginCheck } from "../redux/modules/userSlice";
+import { __getPostBox } from "../redux/modules/postSlice";
+
 const MainPost = () => {
+  const { number } = useParams();
+  useEffect(() => {
+    dispatch(__getPostBox(number));
+  }, []);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { login } = useSelector((state) => state.user);
@@ -15,19 +25,35 @@ const MainPost = () => {
     const a = dispatch(loginCheck(false));
     if (a.payload === false) deleteCookie("token");
   };
+  const { postList } = useSelector((state) => state.post);
 
-  const loginButton = () => {
-    navigate("/log");
+  const ClickKorean = () => {
+    dispatch(__getPostBox("0"));
   };
+  const ClickChinese = () => {
+    dispatch(__getPostBox("1"));
+  };
+  const ClickJapanese = () => {
+    dispatch(__getPostBox("2"));
+  };
+  const ClickWestern = () => {
+    dispatch(__getPostBox("3"));
+  };
+  const ClickEtc = () => {
+    dispatch(__getPostBox("4"));
+  };
+
   return (
     <>
       <WholeCard>
         <ButtonGroup>
-          <ButtonTop>한식</ButtonTop>
-          <ButtonTop>중식</ButtonTop>
-          <ButtonTop>일식</ButtonTop>
-          <ButtonTop>양식</ButtonTop>
-          <ButtonTop>기타</ButtonTop>
+          <ButtonTop onClick={ClickKorean} type="button" name="">
+            한식
+          </ButtonTop>
+          <ButtonTop onClick={ClickChinese}>중식</ButtonTop>
+          <ButtonTop onClick={ClickJapanese}>일식</ButtonTop>
+          <ButtonTop onClick={ClickWestern}>양식</ButtonTop>
+          <ButtonTop onClick={ClickEtc}>기타</ButtonTop>
           <WritePost
             onClick={() => {
               navigate("/post");
@@ -36,25 +62,26 @@ const MainPost = () => {
             글쓰기
           </WritePost>
           {!login ? (
-            <SigninButton onClick={loginButton}>Login</SigninButton>
+            <SigninButton
+              onClick={() => {
+                navigate("/log");
+              }}
+            >
+              Login
+            </SigninButton>
           ) : (
             <SigninButton onClick={logoutButton}>Logout</SigninButton>
           )}
         </ButtonGroup>
         <MainCardWrapper>
-          {/* {posts?.map((post) => {}} */}
-          {/* <MainPostCard />
-          <MainPostCard />
-          {/* to={`/${post.id}`} key={post.id} */}
-          <Link to="/detail/:id">
-            <MainPostCard />
-          </Link>
-          <MainPostCard />
-          <MainPostCard />
-
-          {/* <MainPostCard />
-          <MainPostCard />
-          <MainPostCard /> */}
+          {postList?.map((data) => {
+            return (
+              <MainPostCard
+                key={`main-post-${data.postId}`}
+                data={data}
+              ></MainPostCard>
+            );
+          })}
         </MainCardWrapper>
         <LeftHeader></LeftHeader>
       </WholeCard>
@@ -120,6 +147,7 @@ const SigninButton = styled.button`
   margin: 10px 0 0 1000px;
   position: absolute;
   font-size: 15px;
+  border-color: grey;
   border-radius: 12px;
   :hover {
     border: 1px solid black;
