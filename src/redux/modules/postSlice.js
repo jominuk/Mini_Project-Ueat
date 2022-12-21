@@ -96,6 +96,7 @@ const postSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      //
       .addCase(__getPost.pending, (state) => {
         state.isLoading = true;
       })
