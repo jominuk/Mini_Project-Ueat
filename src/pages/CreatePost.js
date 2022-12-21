@@ -51,7 +51,7 @@ const CreatePost = () => {
 
   return (
     <Main>
-      <button onClick={onClick}>크ㄹ릭</button>
+      <button onClick={onClick}>클릭</button>
       <Stdiv>
         <h1>글 작성 페이지</h1>
         <Stform onSubmit={onSubmit}>

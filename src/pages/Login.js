@@ -7,17 +7,80 @@ import { StyledInput } from "../components/Input";
 import { __loginUser } from "../redux/modules/userSlice";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { login } = useSelector((state) => state.user);
+  const [emailValid, setEmailValid] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [id, setId] = useState("");
+  const [pw, setPw] = useState("");
+
+  useEffect(() => {
+    login ? navigate("/") : navigate("/log");
+  }, [login]);
+
+  const loginHandler = () => {
+    dispatch(
+      __loginUser({
+        email: id,
+        password: pw,
+      })
+    );
+    setId("");
+    setPw("");
+  };
+
+  const handleId = (e) => {
+    if (id.includes("@")) {
+      setEmailValid(true);
+    } else {
+      setEmailValid(false);
+    }
+    setId(e.target.value);
+  };
+
+  const handlePw = (e) => {
+    if (pw.length >= 7) {
+      setPasswordValid(true);
+    } else {
+      setPasswordValid(false);
+    }
+    setPw(e.target.value);
+  };
+
   return (
     <Flex>
       <LeftImage></LeftImage>
       <Main>
         <Stdiv>
           <StHead>로그인</StHead>
-          <StyledInput placeholder="Email" />
-          <StyledInput placeholder="Password" />
+          <StyledInput
+            placeholder="Email"
+            onChange={(e) => handleId(e)}
+            value={id}
+          />
+          <StError>
+            {!emailValid && id.length > 0 && (
+              <div>올바른 이메일을 입력해주세요.</div>
+            )}
+          </StError>
+          <StyledInput
+            type="password"
+            placeholder="Password"
+            onChange={(e) => handlePw(e)}
+            value={pw}
+          />
+          <StError>
+            {!passwordValid && pw.length > 0 && (
+              <div>영문, 숫자 포함 8자 이상 입력해주세요.</div>
+            )}
+          </StError>
           <ButtonArea>
-            <StyledButton>Sign up</StyledButton>
-            <StyledButton>Sign in</StyledButton>
+            <StyledButton onClick={() => navigate("/signup")}>
+              Sign up
+            </StyledButton>
+            <StyledButton onClick={loginHandler}>Sign in</StyledButton>
           </ButtonArea>
         </Stdiv>
       </Main>
@@ -29,6 +92,11 @@ export default Login;
 
 const Flex = styled.div`
   display: flex;
+`;
+
+const StError = styled.div`
+  color: red;
+  font-size: 12px;
 `;
 
 const LeftImage = styled.div`
@@ -72,128 +140,47 @@ const ButtonArea = styled.div`
   gap: 7px;
 `;
 
-// import React, { useState } from "react";
+// const [emailValid, setEmailValid] = useState(false);
 
-// import { useEffect } from "react";
-// /* Styles */
-// import styled from "styled-components";
-
-// /* Routes */
-// import { useNavigate, Link } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-
-// const Login = () => {
-//   const dispatch = useDispatch();
-//   const navigate = useNavigate();
-//   const request = useSelector((state) => state.userReducer);
-
-//   const [id, setId] = useState("");
-//   const [pw, setPw] = useState("");
-
-//   //   const loginHandler = async () => {
-//   //     dispatch(
-//   //       loginDB({
-//   //         username: id,
-//   //         password: pw,
-//   //       })
-//   //     );
-//   //   };
-//   return (
-//     <>
-//       <UserFormWrap>
-//         <UserPageBox>
-//           <UserTitle>Welcome!</UserTitle>
-//           <InputBox
-//             type="text"
-//             onChange={(event) => {
-//               setId(event.target.value);
-//             }}
-//             placeholder="ID"
-//             required
-//           />
-//           <InputBox
-//             type="password"
-//             onChange={(event) => {
-//               setPw(event.target.value);
-//             }}
-//             placeholder="PW"
-//             required
-//           />
-//           <LoginBtnWrap>
-//             <button
-//               style={{
-//                 marginTop: "6px",
-//                 marginBottom: "10px",
-//               }}
-//             >
-//               Sign In
-//             </button>
-//             <Link to="/signup">
-//               <span
-//                 style={{
-//                   fontSize: "12px",
-//                   fontWeight: "400",
-//                   color: "black",
-//                 }}
-//               >
-//                 Create Account
-//               </span>
-//             </Link>
-//           </LoginBtnWrap>
-//         </UserPageBox>
-//       </UserFormWrap>
-//     </>
+// const [notjoin, setNotJoin] = useState("");
+// const handEamil = (e) => {
+//   setEmail(e.target.value);
+//   const regExp = /[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9.]+/;
+//   //console.log("유효성 검사 :", regExp.test(e.target.value));
+//   if (regExp.text(email)) {
+//     setEmailValid(true);
+//   } else {
+//     setEmailValid(false);
+//   }
+// };
+// const handpassword = (e) => {
+//   setPassword(e.target.value);
+//   const regExp =
+//     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+//   //console.log("유효성 검사 :", regExp.test(e.target.value));
+//   if (regExp.text(password)) {
+//     setPasswordValid(true);
+//   } else {
+//     setPasswordValid(false);
+//   }
+// };
+// const onClickConfirm = () => {
+//   if (email == "") {
+//     alert(`${payload.nickname}님 반가워요!`);
+//   } else {
+//     alert("회원가입을 진행해 주세요.");
+//   }
+//   dispatch(
+//     __login({
+//       email,
+//       password,
+//     })
 //   );
 // };
-
-// export default Login;
-
-// /* Header 아래로 보이는 main-box */
-// export const UserFormWrap = styled.div`
-//   height: 100vh;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   @media screen and (max-width: 800px) {
-//     margin-top: 10px;
+// useEffect(() => {
+//   if (emailValid && passwordValid) {
+//     setNotJoin(false);
+//     return;
 //   }
-// `;
-
-// export const UserPageBox = styled.div`
-//   box-sizing: border-box;
-//   width: 500px;
-//   height: 350px;
-//   padding: 30px;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   border: 1px solid #d2d2d2;
-//   border-radius: 8px;
-//   @media screen and (max-width: 800px) {
-//     border: none;
-//   }
-// `;
-
-// export const UserTitle = styled.div`
-//   font-size: 50px;
-//   margin-top: 10px;
-//   margin-bottom: 20px;
-// `;
-
-// export const InputBox = styled.input`
-//   width: 100%;
-//   height: 2rem;
-//   border: none;
-//   border-bottom: 1.5px solid black;
-//   margin-bottom: 10px;
-//   &::placeholder {
-//     color: black;
-//   }
-// `;
-
-// export const LoginBtnWrap = styled.div`
-//   width: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: flex-end;
-// `;
+//   setNotJoin(true);
+// }, [emailValid, passwordValid]);

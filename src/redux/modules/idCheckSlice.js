@@ -12,12 +12,11 @@ export const __idCheck = createAsyncThunk(
   async (email, thunkAPI) => {
     try {
       console.log(email);
-      //   const idVal = { email };
       const validateID = await axios.post(
         "https://sparta.goguma.online/auth/register/check-id",
         { email }
       );
-      console.log("🚀 ~ file: idCheckSlice.js:20 ~ validateID", validateID);
+      console.log(validateID);
       validateID.data.result
         ? alert("사용가능한 이메일 입니다.")
         : alert("중복 된 이메일 입니다.");

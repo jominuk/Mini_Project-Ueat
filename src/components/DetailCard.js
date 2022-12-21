@@ -1,13 +1,18 @@
-import React from "react";
-// import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 // import { __deletePost, __editPost } from "../redux/modules/postSlice";
-// import { useDispatch } from "react-redux";
+import { __createGet } from "../redux/modules/postSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Comment from "./Comment";
+import HeartButton from "./HeartButton";
 
 const DetailCard = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // const post = useSelector((state) => state.post.post);
+  const { post } = useSelector((state) => state.post);
 
   // const [editOn, setEditOn] = useState("");
   // // edit.id랑 비교 후 input창 바꾸기(수정버튼 클릭 시 editOn으로 들어옴)
@@ -15,43 +20,53 @@ const DetailCard = () => {
 
   // //수정완료버튼
   // const onEditComplete = (editID) => {
-  //   dispatch(__patchComment({ id: editID, title, content: input }));
+  //   dispatch(__editPost({ id: editID, title, content: input }));
   //   setEditOn("");
   // };
 
   // const DeleteButton = () => {
   //   dispatch(__deletePost(id));
-  //   dispatch(__editPost(id));
   // };
+
+  useEffect(() => {
+    dispatch(__createGet());
+  }, []);
 
   return (
     <>
       <div>
         <div>
-          <DetailButtonTop>back</DetailButtonTop>
-          <DetailButtonTop2>signin</DetailButtonTop2>
+          <DetailButtonTop onClick={() => navigate("/main")}>
+            back
+          </DetailButtonTop>
+          <DetailButtonTop2 onClick={() => navigate("/log")}>
+            signin
+          </DetailButtonTop2>
         </div>
         <DetailCardWrapper>
-          <DetailNicknameCarrier>nickname</DetailNicknameCarrier>
+          <DetailNicknameCarrier>
+            <div> nickname </div>
+            <div> {post?.postId} </div>
+          </DetailNicknameCarrier>
+
           <DetailImageCarrier alt="" />
-          <DetailTitleCarrier>Title</DetailTitleCarrier>
-          <DetailContentCarrier>content</DetailContentCarrier>
+
+          <HeartButton />
+          <DetailTitleCarrier>{post?.title}</DetailTitleCarrier>
+          <DetailContentCarrier>{post?.content}</DetailContentCarrier>
         </DetailCardWrapper>
         <div>
-          <DetailButtonEdit>Edit</DetailButtonEdit>
-          <DetailButtonDEL>Delete</DetailButtonDEL>
+          <DetailButtonEdit> Edit </DetailButtonEdit>
+          <DetailButtonDEL> Delete </DetailButtonDEL>
         </div>
       </div>
+      <Comment />
     </>
   );
 };
 
 // return (
 //   <>
-//     <div>
-//       <DetailButtonTop>back</DetailButtonTop>
-//       <DetailButtonTop2>signin</DetailButtonTop2>
-//     </div>
 //     <div>
 //       {post.map((edit) => {
 //         // editOn 아이디랑 비교해서 일치하는 3항 연산자로 인풋창 바꾸기
@@ -68,8 +83,7 @@ const DetailCard = () => {
 //             </DetailCardWrapper>
 //             <div>
 //               <DetailButtonEdit onClick={() => onEditComplete(el.id)}>
-//                 {" "}
-//                 completion{" "}
+//                 completion
 //               </DetailButtonEdit>
 //               {/* 새롭게 만들어 일치하는 post id가 없게 만들기 */}
 //               <DetailButtonDEL onClick={() => setEditOn("")}>
@@ -114,11 +128,13 @@ const DetailCardWrapper = styled.div`
   margin: 100px 0 0 35px;
 `;
 const DetailNicknameCarrier = styled.div`
+  display: flex;
   width: 600px;
   height: 40px;
   border: 0px solid black;
   border-top-right-radius: 14px;
   border-top-left-radius: 14px;
+  justify-content: space-between;
 `;
 const DetailImageCarrier = styled.img`
   width: 600px;
@@ -175,4 +191,5 @@ const DetailButtonEdit = styled.div`
     border: 1px solid black;
   }
 `;
+
 export default DetailCard;

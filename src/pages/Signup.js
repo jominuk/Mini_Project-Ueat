@@ -14,10 +14,12 @@ const Signup = () => {
   const [nicknameMessage, setNicknameMessage] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
+
   //유효성검사
   const [isEmail, setIsEmail] = useState(false);
   const [isNickname, setIsNickname] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
+
   //초기값
   const [input, setInput] = useState({ nickname: "", email: "", password: "" });
   const onChangeHandler = (e) => {
