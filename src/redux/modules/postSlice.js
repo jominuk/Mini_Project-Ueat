@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instance } from "../../instance/instance";
+import setToken from "../../Pattern/setToken";
+import { getCookie } from "../../shared/cookie";
 
 export const __getPost = createAsyncThunk(
   "GET_POST",
@@ -17,7 +19,8 @@ export const __createPost = createAsyncThunk(
   "CREATE_POST",
   async (payload, thunkAPI) => {
     try {
-      console.log(payload);
+      const accessToken = getCookie("token");
+      setToken(accessToken);
       const { data } = await instance.post("/posts", payload);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {

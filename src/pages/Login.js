@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { StyledButton } from "../components/Button";
 import { StyledInput } from "../components/Input";
 import { __loginUser } from "../redux/modules/userSlice";
-import { getCookie } from "../shared/cookie";
 
 const Login = () => {
   const { login } = useSelector((state) => state.user);
