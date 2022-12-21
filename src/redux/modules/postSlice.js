@@ -3,11 +3,13 @@ import { instance } from "../../instance/instance";
 import setToken from "../../Pattern/setToken";
 import { getCookie } from "../../shared/cookie";
 
-export const __getPost = createAsyncThunk(
+export const __getPostBox = createAsyncThunk(
   "GET_POST",
-  async ({ categoryId }, thunkAPI) => {
+  async (payload, thunkAPI) => {
     try {
-      const { data } = await instance.get(`/posts?${categoryId}&page`);
+      const { data } = await instance.get(
+        `/posts?categoryId=${payload}&page=1`
+      );
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -100,14 +102,14 @@ const postSlice = createSlice({
   extraReducers: (builder) => {
     builder
       //
-      .addCase(__getPost.pending, (state) => {
+      .addCase(__getPostBox.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(__getPost.fulfilled, (state, action) => {
+      .addCase(__getPostBox.fulfilled, (state, action) => {
         state.isLoading = false;
         state.postList = action.payload.posts;
       })
-      .addCase(__getPost.rejected, (state, action) => {
+      .addCase(__getPostBox.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
@@ -176,5 +178,5 @@ const postSlice = createSlice({
     // })
   },
 });
-
+export const { data } = postSlice.actions;
 export default postSlice.reducer;
