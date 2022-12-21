@@ -3,9 +3,11 @@ import { instance } from "../../instance/instance";
 
 export const __getPost = createAsyncThunk(
   "GET_POST",
-  async ({ categoryId }, thunkAPI) => {
+  async (payload, thunkAPI) => {
     try {
-      const { data } = await instance.get(`/posts?${categoryId}&page`);
+      const { data } = await instance.get(
+        `/posts?categoryId=${payload}&page=1`
+      );
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
