@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instance } from "../../instance/instance";
-import { setCookie } from "../../shared/cookie";
+import { getCookie, setCookie } from "../../shared/cookie";
 
 export const __loginUser = createAsyncThunk(
   "LOGIN_USER",
@@ -23,7 +23,7 @@ export const __loginUser = createAsyncThunk(
 const initialState = {
   email: "",
   nickname: "",
-  login: false,
+  login: getCookie("token") === undefined ? false : true,
   isLoading: false,
   error: null,
   errorMessage: "",
@@ -32,7 +32,12 @@ const initialState = {
 const userSlice = createSlice({
   name: "LOGIN_USER",
   initialState,
-  reducers: {},
+  reducers: {
+    loginCheck: (state, action) => {
+      console.log(action.payload);
+      state.login = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(__loginUser.pending, (state) => {
@@ -51,4 +56,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { loginCheck } = userSlice.actions;
 export default userSlice.reducer;

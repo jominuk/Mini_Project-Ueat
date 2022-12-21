@@ -17,8 +17,9 @@ const Login = () => {
   const [pw, setPw] = useState("");
 
   useEffect(() => {
-    console.log(getCookie("token"));
-    getCookie("token") === undefined ? navigate("/log") : navigate("/main");
+    if (login) {
+      navigate("/main");
+    }
   }, [login]);
 
   const loginHandler = () => {
@@ -33,7 +34,7 @@ const Login = () => {
   };
 
   const handleId = (e) => {
-    if (id.includes("@")) {
+    if (id.includes("@") && id.includes(".")) {
       setEmailValid(true);
     } else {
       setEmailValid(false);
@@ -81,7 +82,12 @@ const Login = () => {
             <StyledButton onClick={() => navigate("/signup")}>
               Sign up
             </StyledButton>
-            <StyledButton onClick={loginHandler}>Sign in</StyledButton>
+            <StyledButton
+              onClick={loginHandler}
+              disabled={!(passwordValid && emailValid)}
+            >
+              Sign in
+            </StyledButton>
           </ButtonArea>
         </Stdiv>
       </Main>
