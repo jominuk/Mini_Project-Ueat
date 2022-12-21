@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { StyledButton } from "../components/Button";
 import { StyledImage } from "../components/Image";
@@ -8,6 +9,8 @@ import { __createPost } from "../redux/modules/postSlice";
 
 const CreatePost = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [preview, setPreview] = useState(null);
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
@@ -39,19 +42,18 @@ const CreatePost = () => {
     for (let key of formData.keys()) {
       console.log(key);
     }
-    dispatch(__createPost(formData));
+    const a = await dispatch(__createPost(formData));
+    if (a.payload.message === "작성 완료") {
+      alert("작성 완료");
+      navigate("/main");
+    }
 
     // result.status ===200 ?
     // alert("작성완료!")
   };
 
-  const onClick = () => {
-    dispatch(__createPost({ email: "boxman2@naver.com" }));
-  };
-
   return (
     <Main>
-      <button onClick={onClick}>크ㄹ릭</button>
       <Stdiv>
         <h1>글 작성 페이지</h1>
         <Stform onSubmit={onSubmit}>

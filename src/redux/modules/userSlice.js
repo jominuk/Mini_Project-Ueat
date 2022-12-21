@@ -7,7 +7,9 @@ export const __loginUser = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const { data } = await instance.post("/auth/login", payload);
-      setCookie("token", data, {
+      console.log(data);
+      console.log(data.token);
+      setCookie("token", data.token, {
         path: "/",
         expire: "after60m",
       });

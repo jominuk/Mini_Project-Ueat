@@ -18,8 +18,7 @@ export const __createPost = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       console.log(payload);
-      const { data } = await instance.post("/auth/register/check-id", payload);
-      console.log(data);
+      const { data } = await instance.post("/posts", payload);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -98,7 +97,6 @@ const postSlice = createSlice({
       })
       .addCase(__createPost.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.post = [...state.post, action.payload];
       })
       .addCase(__createPost.rejected, (state) => {
         state.isLoading = true;

@@ -89,50 +89,57 @@ const Signup = () => {
       <Main>
         <Stdiv>
           <StHead>회원가입</StHead>
-          <div>
-            <StyledInput
-              name="nickname"
-              onChange={onChangeHandler}
-              type="text"
-              placeholder="Nickname"
-            />
-            <StyledButton
-              onClick={onClickNickname}
-              disabled={!isNickname}
-              width="50px"
-            >
-              확인
-            </StyledButton>
-          </div>
-          <span>{nicknameMessage}</span>
-          <div>
-            <StyledInput
-              name="email"
-              onChange={onChangeHandler}
-              type="text"
-              placeholder="Email"
-            />
-            <StyledButton onClick={onClickEmail} width="50px">
-              확인
-            </StyledButton>
-            <div>{emailMessage}</div>
-          </div>
-          <div>
-            <StyledInput
-              name="password"
-              onChange={onChangeHandler}
-              type="text"
-              placeholder="Password"
-            />
-            <StyledButton width="50px">확인</StyledButton>
-          </div>
+          <Layout>
+            <div>
+              <StyledInput
+                name="nickname"
+                onChange={onChangeHandler}
+                type="text"
+                placeholder="Nickname"
+              />
+              <StyledButton
+                onClick={onClickNickname}
+                disabled={!isNickname}
+                width="50px"
+              >
+                확인
+              </StyledButton>
+            </div>
+            <span>{nicknameMessage}</span>
+            <div>
+              <StyledInput
+                name="email"
+                onChange={onChangeHandler}
+                type="text"
+                placeholder="Email"
+              />
+              <StyledButton onClick={onClickEmail} width="50px">
+                확인
+              </StyledButton>
+              <div>{emailMessage}</div>
+            </div>
+            <div>
+              <StyledInput
+                name="password"
+                onChange={onChangeHandler}
+                type="text"
+                placeholder="Password"
+              />
+              <StyledInput
+                name="password"
+                onChange={onChangeHandler}
+                type="text"
+                placeholder="Password"
+              />
+            </div>
 
-          <ButtonArea>
-            <StyledButton onClick={onClickHandler} type="submit">
-              SignUp
-            </StyledButton>
-            <StyledButton type="submit">SignIn</StyledButton>
-          </ButtonArea>
+            <ButtonArea>
+              <StyledButton onClick={onClickHandler} type="submit">
+                SignUp
+              </StyledButton>
+              <StyledButton type="submit">SignIn</StyledButton>
+            </ButtonArea>
+          </Layout>
         </Stdiv>
       </Main>
     </Flex>
@@ -147,6 +154,10 @@ const Stspan = styled.span`
 
 const Flex = styled.div`
   display: flex;
+`;
+
+const Layout = styled.div`
+  width: 430px;
 `;
 
 const LeftImage = styled.div`
@@ -188,5 +199,6 @@ const Main = styled.div`
 const ButtonArea = styled.div`
   margin-top: 20px;
   display: flex;
+  justify-content: center;
   gap: 7px;
 `;

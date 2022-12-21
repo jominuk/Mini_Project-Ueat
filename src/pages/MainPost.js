@@ -6,9 +6,14 @@ import MainPostCard from "../components/MainPostCard";
 // import { __getPosts } from "../redux/modules/postSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { deleteCookie, getCookie } from "../shared/cookie";
 
 const MainPost = () => {
   const navigate = useNavigate();
+  const { login } = useSelector((state) => state.user);
+  let menuList = [];
+
   return (
     <>
       <WholeCard>
@@ -25,7 +30,23 @@ const MainPost = () => {
           >
             글쓰기
           </WritePost>
-          <SigninButton>SignIn</SigninButton>
+          {getCookie("token") === undefined ? (
+            <SigninButton
+              onClick={() => {
+                navigate("/log");
+              }}
+            >
+              Login
+            </SigninButton>
+          ) : (
+            <SigninButton
+              onClick={() => {
+                deleteCookie("token");
+              }}
+            >
+              Logout
+            </SigninButton>
+          )}
         </ButtonGroup>
         <MainCardWrapper>
           {/* {posts?.map((post) => {}} */}
@@ -35,6 +56,7 @@ const MainPost = () => {
           <Link to="/detail/:id">
             <MainPostCard />
           </Link>
+          <MainPostCard />
           <MainPostCard />
 
           {/* <MainPostCard />
