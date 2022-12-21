@@ -1,11 +1,12 @@
 import styled, { css } from "styled-components";
 
 export const StyledButton = styled.button`
-  /* padding: 6px 25px; */
   border-radius: 4px;
   font-size: 1em;
   cursor: pointer;
 
+  font-weight: ${(props) => props.fontWeight || ""};
+  font-size: ${(props) => props.fontSize || "1em"};
   height: ${(props) => props.height || "40px"};
   width: ${(props) => props.width || "120px"};
   color: ${(props) => props.color || "white"};

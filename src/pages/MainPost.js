@@ -1,23 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import MainPostCard from "../components/MainPostCard";
-import { useNavigate } from "react-router-dom";
+// import { useState, useEffect } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { __getPosts } from "../redux/modules/postSlice";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCookie, getCookie } from "../shared/cookie";
+import { loginCheck } from "../redux/modules/userSlice";
 import { __getPostBox } from "../redux/modules/postSlice";
-import { useParams } from "react-router-dom";
-import { useEffect } from "react";
 
 const MainPost = () => {
   const { number } = useParams();
   useEffect(() => {
-    __getPostBox(number);
+    dispatch(__getPostBox(number));
   }, []);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { login } = useSelector((state) => state.user);
 
+  const logoutButton = () => {
+    const a = dispatch(loginCheck(false));
+    if (a.payload === false) deleteCookie("token");
+  };
   const { postList } = useSelector((state) => state.post);
 
   const ClickKorean = () => {
@@ -54,7 +61,7 @@ const MainPost = () => {
           >
             글쓰기
           </WritePost>
-          {getCookie("token") === undefined ? (
+          {!login ? (
             <SigninButton
               onClick={() => {
                 navigate("/log");
@@ -63,18 +70,11 @@ const MainPost = () => {
               Login
             </SigninButton>
           ) : (
-            <SigninButton
-              onClick={() => {
-                deleteCookie("token");
-              }}
-            >
-              Logout
-            </SigninButton>
+            <SigninButton onClick={logoutButton}>Logout</SigninButton>
           )}
         </ButtonGroup>
         <MainCardWrapper>
           {postList?.map((data) => {
-            console.log("🚀 ~ file: MainPost.js:90 ~ MainPost ~ data", data);
             return (
               <MainPostCard
                 key={`main-post-${data.postId}`}
@@ -82,8 +82,6 @@ const MainPost = () => {
               ></MainPostCard>
             );
           })}
-          {/* <MainPostCard />
-          <MainPostCard /> */}
         </MainCardWrapper>
         <LeftHeader></LeftHeader>
       </WholeCard>
@@ -149,6 +147,7 @@ const SigninButton = styled.button`
   margin: 10px 0 0 1000px;
   position: absolute;
   font-size: 15px;
+  border-color: grey;
   border-radius: 12px;
   :hover {
     border: 1px solid black;
