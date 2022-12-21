@@ -11,13 +11,11 @@ export const __idCheck = createAsyncThunk(
   "auth/idCheck",
   async (email, thunkAPI) => {
     try {
-      console.log(email);
       //   const idVal = { email };
       const validateID = await axios.post(
         "https://sparta.goguma.online/auth/register/check-id",
         { email }
       );
-      console.log("🚀 ~ file: idCheckSlice.js:20 ~ validateID", validateID);
       validateID.data.result
         ? alert("사용가능한 이메일 입니다.")
         : alert("중복 된 이메일 입니다.");
@@ -40,7 +38,7 @@ const authSlice = createSlice({
     },
     [__idCheck.fulfilled]: (state, action) => {
       // API 요청이 성공한 경우 상태를 API 응답 데이터로 업데이트
-      state.idCheck = action.payload;
+      state.idCheck = action.payload.result;
       state.isLoading = false;
     },
     [__idCheck.rejected]: (state, action) => {

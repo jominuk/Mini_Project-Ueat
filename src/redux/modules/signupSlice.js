@@ -5,18 +5,20 @@ const initialState = {
   nickname: "",
   email: "",
   password: "",
+  passwordConfirm: "",
   msg: "",
 };
 
 export const __signUp = createAsyncThunk(
   "auth/signUp",
-  async ({ nickname, email, password }, thunkAPI) => {
+  async ({ nickname, email, password, passwordConfirm }, thunkAPI) => {
     try {
-      const a = { nickname, email, password };
+      const a = { nickname, email, password, passwordConfirm };
       const postSignup = await axios.post(
         "https://sparta.goguma.online/auth/register",
         a
       );
+      console.log("🚀 ~ file: signupSlice.js:21 ~ postSignup", postSignup);
       return thunkAPI.fulfillWithValue(postSignup.data);
     } catch (error) {
       console.log(error);
