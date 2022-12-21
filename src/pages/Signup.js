@@ -6,22 +6,31 @@ import { useState } from "react";
 import { __signUp } from "../redux/modules/signupSlice";
 import { __nickCheck } from "../redux/modules/nickCheckSlice";
 import { __idCheck } from "../redux/modules/idCheckSlice";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { idCheck } = useSelector((state) => state.idCheck);
-
+  const { nickCheck } = useSelector((state) => state.nickCheck);
+  //메세지검사
   const [nicknameMessage, setNicknameMessage] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
-
+  const [passwordConfirmMessage, setPasswordConfirmMessage] = useState("");
+  //비밀번호 검사확인
+  const [onPassword, setOnPassword] = useState("");
+  const [onPasswordConfirm, setOnPasswordConfirm] = useState("");
   //유효성검사
   const [isEmail, setIsEmail] = useState(false);
   const [isNickname, setIsNickname] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
-
+  const [isPasswordConfirm, setIsPasswordConfirm] = useState(false);
   //초기값
-  const [input, setInput] = useState({ nickname: "", email: "", password: "" });
+  const [input, setInput] = useState({
+    nickname: "",
+    email: "",
+  });
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
@@ -37,8 +46,6 @@ const Signup = () => {
         }
         break;
       case "email":
-        // const emailRegExp =
-        // /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
         const a = input.email;
         if (!a.includes("@") && !a.includes(".")) {
           setEmailMessage("이메일의 형식이 올바르지 않습니다!");
@@ -52,34 +59,56 @@ const Signup = () => {
         return;
     }
   };
-  const onClickHandler = () => {
-    dispatch(__signUp(input));
+
+  const passwordConfirmACtion = (e) => {
+    setOnPasswordConfirm(e.target.value);
+    if (e.target.value === onPassword) {
+      setPasswordConfirmMessage("똑같은 비밀번호를 입력했습니다.");
+      setIsPasswordConfirm(true);
+    } else {
+      setPasswordConfirmMessage("떼잉~ 비밀번호가 똑같지 않아요!");
+      setIsPasswordConfirm(false);
+    }
+  };
+
+  const previousPasswordConf = (e) => {
+    setOnPassword(e.target.value);
+    if (onPasswordConfirm === "") {
+      setPasswordMessage("비밀번호는 8글자 이상 입력해주세요!");
+      setIsPassword(false);
+      if (onPassword.length > 7) {
+        setPasswordMessage("");
+        setIsPassword(true);
+      }
+      return;
+    }
+    if (e.target.value === onPasswordConfirm) {
+      setPasswordConfirmMessage("똑같은 비밀번호를 입력했습니다.");
+      setIsPasswordConfirm(true);
+    } else {
+      setPasswordConfirmMessage("떼잉~ 비밀번호가 똑같지 않아요!");
+      setIsPasswordConfirm(false);
+    }
+  };
+
+  const onClickHandler = async () => {
+    if (idCheck && isPassword && nickCheck && isPasswordConfirm) {
+      const signUpResult = await dispatch(
+        __signUp({ ...input, password: onPassword })
+      );
+      if (signUpResult.payload.message === "가입 완료") {
+        alert("회원가입이 성공적으로 가입됐습니다.");
+        navigate("/log");
+      } else {
+        alert("서버에러입니다.");
+      }
+    } else {
+      alert("조건에 성립하지 않습니다, 다시 시도해주세요.");
+    }
   };
   const onClickEmail = () => {
-    // const a = input.email;
-    // if (!a.includes("@") && !a.includes(".")) return;
     dispatch(__idCheck(input.email));
-
-    // idCheck
-    //   ? alert("사용할 수 있는 이메일 입니다.")
-    //   : alert("중복 된 이메일 입니다.");
   };
-
-  // const onClickPassword = (e) => {
-  //   const currentPassword = e.target.value;
-  //   setInput.Password(currentPassword);
-  //   const passwordRegExp =
-  //     /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-  //   if (!passwordRegExp.test(currentPassword)) {
-  //     setPasswordMessage(
-  //       "숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요!"
-  //     );
-  //     setIsPassword(false);
-  //   } else {
-  //     setPasswordMessage("안전한 비밀번호 입니다.");
-  //     setIsPassword(true);
-  //   }
-  // };
 
   const onClickNickname = () => {
     dispatch(__nickCheck({ nickname: input.nickname }));
@@ -97,6 +126,7 @@ const Signup = () => {
               onChange={onChangeHandler}
               type="text"
               placeholder="Nickname"
+              width="300px"
             />
             <StyledButton
               onClick={onClickNickname}
@@ -113,8 +143,13 @@ const Signup = () => {
               onChange={onChangeHandler}
               type="text"
               placeholder="Email"
+              width="300px"
             />
-            <StyledButton onClick={onClickEmail} width="50px">
+            <StyledButton
+              onClick={onClickEmail}
+              disabled={!isEmail}
+              width="50px"
+            >
               확인
             </StyledButton>
             <div>{emailMessage}</div>
@@ -122,11 +157,18 @@ const Signup = () => {
           <div>
             <StyledInput
               name="password"
-              onChange={onChangeHandler}
+              onChange={previousPasswordConf}
               type="text"
               placeholder="Password"
             />
-            <StyledButton width="50px">확인</StyledButton>
+            <div>{passwordMessage}</div>
+            <StyledInput
+              name="passwordConfirm"
+              onChange={passwordConfirmACtion}
+              type="text"
+              placeholder="Password Confirm"
+            />
+            <div>{passwordConfirmMessage}</div>
           </div>
 
           <ButtonArea>
@@ -142,10 +184,6 @@ const Signup = () => {
 };
 
 export default Signup;
-
-const Stspan = styled.span`
-  font-size: 2px;
-`;
 
 const Flex = styled.div`
   display: flex;
@@ -192,3 +230,14 @@ const ButtonArea = styled.div`
   display: flex;
   gap: 7px;
 `;
+
+// const ButtonWrapper = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+// `;
+// const ButtonWrapper2 = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+// `;

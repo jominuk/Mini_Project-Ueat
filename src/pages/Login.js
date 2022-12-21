@@ -140,18 +140,78 @@ const ButtonArea = styled.div`
   gap: 7px;
 `;
 
-// const [emailValid, setEmailValid] = useState(false);
+// import React, { useState } from "react";
 
-// const [notjoin, setNotJoin] = useState("");
-// const handEamil = (e) => {
-//   setEmail(e.target.value);
-//   const regExp = /[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9.]+/;
-//   //console.log("유효성 검사 :", regExp.test(e.target.value));
-//   if (regExp.text(email)) {
-//     setEmailValid(true);
-//   } else {
-//     setEmailValid(false);
-//   }
+// import { useEffect } from "react";
+// /* Styles */
+// import styled from "styled-components";
+
+// /* Routes */
+// import { useNavigate, Link } from "react-router-dom";
+// import { useDispatch, useSelector } from "react-redux";
+
+// const Login = () => {
+//   const dispatch = useDispatch();
+//   const navigate = useNavigate();
+//   const request = useSelector((state) => state.userReducer);
+
+//   const [id, setId] = useState("");
+//   const [pw, setPw] = useState("");
+
+//   //   const loginHandler = async () => {
+//   //     dispatch(
+//   //       loginDB({
+//   //         username: id,
+//   //         password: pw,
+//   //       })
+//   //     );
+//   //   };
+//   return (
+//     <>
+//       <UserFormWrap>
+//         <UserPageBox>
+//           <UserTitle>Welcome!</UserTitle>
+//           <InputBox
+//             type="text"
+//             onChange={(event) => {
+//               setId(event.target.value);
+//             }}
+//             placeholder="ID"
+//             required
+//           />
+//           <InputBox
+//             type="password"
+//             onChange={(event) => {
+//               setPw(event.target.value);
+//             }}
+//             placeholder="PW"
+//             required
+//           />
+//           <LoginBtnWrap>
+//             <button
+//               style={{
+//                 marginTop: "6px",
+//                 marginBottom: "10px",
+//               }}
+//             >
+//               Sign In
+//             </button>
+//             <Link to="/signup">
+//               <span
+//                 style={{
+//                   fontSize: "12px",
+//                   fontWeight: "400",
+//                   color: "black",
+//                 }}
+//               >
+//                 Create Account
+//               </span>
+//             </Link>
+//           </LoginBtnWrap>
+//         </UserPageBox>
+//       </UserFormWrap>
+//     </>
+//   );
 // };
 // const handpassword = (e) => {
 //   setPassword(e.target.value);
