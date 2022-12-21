@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instance } from "../../instance/instance";
+import setToken from "../../Pattern/setToken";
+import { getCookie } from "../../shared/cookie";
 
-export const __getPost = createAsyncThunk(
+export const __getPostBox = createAsyncThunk(
   "GET_POST",
   async (payload, thunkAPI) => {
     try {
@@ -19,7 +21,8 @@ export const __createPost = createAsyncThunk(
   "CREATE_POST",
   async (payload, thunkAPI) => {
     try {
-      console.log(payload);
+      const accessToken = getCookie("token");
+      setToken(accessToken);
       const { data } = await instance.post("/posts", payload);
       return thunkAPI.fulfillWithValue(data);
     } catch (error) {
@@ -98,14 +101,15 @@ const postSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(__getPost.pending, (state) => {
+      //
+      .addCase(__getPostBox.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(__getPost.fulfilled, (state, action) => {
+      .addCase(__getPostBox.fulfilled, (state, action) => {
         state.isLoading = false;
         state.postList = action.payload.posts;
       })
-      .addCase(__getPost.rejected, (state, action) => {
+      .addCase(__getPostBox.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
@@ -174,5 +178,5 @@ const postSlice = createSlice({
     // })
   },
 });
-
+export const { data } = postSlice.actions;
 export default postSlice.reducer;

@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instance } from "../../instance/instance";
+import setToken from "../../Pattern/setToken";
 import { setCookie } from "../../shared/cookie";
 
 export const __loginUser = createAsyncThunk(
   "LOGIN_USER",
   async (payload, thunkAPI) => {
     try {
+      setToken();
       const { data } = await instance.post("/auth/login", payload);
       setCookie("token", data.token, {
         path: "/",
@@ -32,7 +34,12 @@ const initialState = {
 const userSlice = createSlice({
   name: "LOGIN_USER",
   initialState,
-  reducers: {},
+  reducers: {
+    loginCheck: (state, action) => {
+      console.log("로그인체크");
+      state.login = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(__loginUser.pending, (state) => {
@@ -51,4 +58,5 @@ const userSlice = createSlice({
   },
 });
 
+export const { loginCheck } = userSlice.actions;
 export default userSlice.reducer;

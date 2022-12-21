@@ -1,28 +1,52 @@
 import React from "react";
 import styled from "styled-components";
 import MainPostCard from "../components/MainPostCard";
-// import { useState, useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { __getPosts } from "../redux/modules/postSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteCookie, getCookie } from "../shared/cookie";
+import { __getPostBox } from "../redux/modules/postSlice";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 const MainPost = () => {
+  const { number } = useParams();
+  useEffect(() => {
+    __getPostBox(number);
+  }, []);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { login } = useSelector((state) => state.user);
-  let menuList = [];
+
+  const { postList } = useSelector((state) => state.post);
+
+  const ClickKorean = () => {
+    dispatch(__getPostBox("0"));
+  };
+  const ClickChinese = () => {
+    dispatch(__getPostBox("1"));
+  };
+  const ClickJapanese = () => {
+    dispatch(__getPostBox("2"));
+  };
+  const ClickWestern = () => {
+    dispatch(__getPostBox("3"));
+  };
+  const ClickEtc = () => {
+    dispatch(__getPostBox("4"));
+  };
 
   return (
     <>
       <WholeCard>
         <ButtonGroup>
-          <ButtonTop>한식</ButtonTop>
-          <ButtonTop>중식</ButtonTop>
-          <ButtonTop>일식</ButtonTop>
-          <ButtonTop>양식</ButtonTop>
-          <ButtonTop>기타</ButtonTop>
+          <ButtonTop onClick={ClickKorean} type="button" name="">
+            한식
+          </ButtonTop>
+          <ButtonTop onClick={ClickChinese}>중식</ButtonTop>
+          <ButtonTop onClick={ClickJapanese}>일식</ButtonTop>
+          <ButtonTop onClick={ClickWestern}>양식</ButtonTop>
+          <ButtonTop onClick={ClickEtc}>기타</ButtonTop>
           <WritePost
             onClick={() => {
               navigate("/post");
@@ -49,18 +73,16 @@ const MainPost = () => {
           )}
         </ButtonGroup>
         <MainCardWrapper>
-          {/* {posts?.map((post) => {}} */}
+          {postList?.map((data) => {
+            console.log("🚀 ~ file: MainPost.js:90 ~ MainPost ~ data", data);
+            return (
+              <MainPostCard
+                key={`main-post-${data.postId}`}
+                data={data}
+              ></MainPostCard>
+            );
+          })}
           {/* <MainPostCard />
-          <MainPostCard />
-          {/* to={`/${post.id}`} key={post.id} */}
-          <Link to="/detail/:id">
-            <MainPostCard />
-          </Link>
-          <MainPostCard />
-          <MainPostCard />
-
-          {/* <MainPostCard />
-          <MainPostCard />
           <MainPostCard /> */}
         </MainCardWrapper>
         <LeftHeader></LeftHeader>

@@ -188,10 +188,6 @@ const Flex = styled.div`
   display: flex;
 `;
 
-const Layout = styled.div`
-  width: 430px;
-`;
-
 const LeftImage = styled.div`
   background-image: url("https://img.siksinhot.com/seeon/1622598477140625.jpg");
   background-repeat: no-repeat;
