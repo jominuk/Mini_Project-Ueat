@@ -15,7 +15,6 @@ const Login = () => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
-  getCookie("token");
 
   useEffect(() => {
     console.log(getCookie("token"));
@@ -30,7 +29,6 @@ const Login = () => {
       })
     );
     setId("");
-
     setPw("");
   };
 
