@@ -170,7 +170,6 @@ const Signup = () => {
             />
             <div>{passwordConfirmMessage}</div>
           </div>
-
           <ButtonArea>
             <StyledButton onClick={onClickHandler} type="submit">
               SignUp
@@ -187,6 +186,10 @@ export default Signup;
 
 const Flex = styled.div`
   display: flex;
+`;
+
+const Layout = styled.div`
+  width: 430px;
 `;
 
 const LeftImage = styled.div`
@@ -228,6 +231,7 @@ const Main = styled.div`
 const ButtonArea = styled.div`
   margin-top: 20px;
   display: flex;
+  justify-content: center;
   gap: 7px;
 `;
 

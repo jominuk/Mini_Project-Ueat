@@ -5,19 +5,20 @@ import styled from "styled-components";
 import { StyledButton } from "../components/Button";
 import { StyledInput } from "../components/Input";
 import { __loginUser } from "../redux/modules/userSlice";
+import { getCookie } from "../shared/cookie";
 
 const Login = () => {
+  const { login } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const { login } = useSelector((state) => state.user);
   const [emailValid, setEmailValid] = useState(false);
   const [passwordValid, setPasswordValid] = useState(false);
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
 
   useEffect(() => {
-    login ? navigate("/") : navigate("/log");
+    console.log(getCookie("token"));
+    getCookie("token") === undefined ? navigate("/log") : navigate("/main");
   }, [login]);
 
   const loginHandler = () => {
