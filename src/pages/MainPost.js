@@ -6,14 +6,24 @@ import MainPostCard from "../components/MainPostCard";
 // import { __getPosts } from "../redux/modules/postSlice";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { deleteCookie, getCookie } from "../shared/cookie";
-
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCookie } from "../shared/cookie";
+import { loginCheck } from "../redux/modules/userSlice";
 const MainPost = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { login } = useSelector((state) => state.user);
+
   let menuList = [];
 
+  const logoutButton = () => {
+    const a = dispatch(loginCheck(false));
+    if (a.payload === false) deleteCookie("token");
+  };
+
+  const loginButton = () => {
+    navigate("/log");
+  };
   return (
     <>
       <WholeCard>
@@ -30,22 +40,10 @@ const MainPost = () => {
           >
             글쓰기
           </WritePost>
-          {getCookie("token") === undefined ? (
-            <SigninButton
-              onClick={() => {
-                navigate("/log");
-              }}
-            >
-              Login
-            </SigninButton>
+          {!login ? (
+            <SigninButton onClick={loginButton}>Login</SigninButton>
           ) : (
-            <SigninButton
-              onClick={() => {
-                deleteCookie("token");
-              }}
-            >
-              Logout
-            </SigninButton>
+            <SigninButton onClick={logoutButton}>Logout</SigninButton>
           )}
         </ButtonGroup>
         <MainCardWrapper>
