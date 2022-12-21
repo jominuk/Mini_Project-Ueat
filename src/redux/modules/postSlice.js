@@ -27,18 +27,19 @@ export const __createPost = createAsyncThunk(
   }
 );
 
-// //get??
-// export const __createGet = createAsyncThunk(
-//   "CREATE_GET",
-//   async ( payload, thunkAPI) => {
-//     try {
-//       const {data} = await instance.post("/auth/register/check-id")
-//       return thunkAPI.fulfillWithValue(data)
-//     }catch ( error ) {
-//       return thunkAPI.rejectWithValue(error)
-//     }
-//   }
-// )
+//get??
+export const __createGet = createAsyncThunk(
+  "CREATE_GET",
+  async (payload, thunkAPI) => {
+    try {
+      const { data } = await instance.get("/posts/47");
+      console.log(data);
+      return thunkAPI.fulfillWithValue(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 // //삭제
 // export const __deletePost = createAsyncThunk(
@@ -53,12 +54,12 @@ export const __createPost = createAsyncThunk(
 //   }
 // )
 
-//수정
+// // 수정
 // export const __editPost = createAsyncThunk(
 //   "EDIT_POST",
 //   async (payload, thunkAPI) => {
 //     try {
-//       const edited = await axios.patch(`post/${payload.id}`, {
+//       const edited = await instance.patch(`post/${payload.id}`, {
 //         title: payload.title,
 //         content: payload.content,
 //       });
@@ -69,12 +70,27 @@ export const __createPost = createAsyncThunk(
 //   }
 // );
 
+// //like
+// export const __likeHeart = createAsyncThunk(
+//   "LIKE_HEART",
+//   async (payload, thunkAPI) => {
+//     try {
+//       const like = await instance.post(`post/`)
+//       return thunkAPI.fulfillWithValue(like.data)
+//     }catch (error) {
+//       return thunkAPI.rejectWithValue(error)
+//     }
+//   }
+// )
+
 const initialState = {
   postList: [],
   post: {},
   isLoading: false,
+  like: false,
 };
-
+// 데이터 받ㅇ느걸로 리듀서에 넣어줘서 post안에 넣어준다.
+// 그럼 홈페이지 실행될때
 const postSlice = createSlice({
   name: "POST_SLICE",
   initialState,
@@ -102,20 +118,20 @@ const postSlice = createSlice({
       })
       .addCase(__createPost.rejected, (state) => {
         state.isLoading = true;
-      });
+      })
 
-    // //get?
-    // .addCase(__createGet.pending, (state) => {
-    //   state.isLoading = true;
-    // })
-    // .addCase(__createGet.fulfilled, (state, action) => {
-    //   state.isLoading = false;
-    //   state.post = action.payload;
-    // })
-    // .addCase(__createGet.rejected, (state, action) => {
-    //   state.isLoading = false;
-    //   state.error = action.payload;
-    // });
+      //get?
+      .addCase(__createGet.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(__createGet.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.post = action.payload;
+      })
+      .addCase(__createGet.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
 
     // //삭제
     // .addCase(__deletePost.pending, (state) => {
@@ -141,6 +157,18 @@ const postSlice = createSlice({
     //   )
     // })
     // .addCase(__editPost.rejected, (state,action) => {
+    //   state.isLoading = false
+    //   state.error = action.payload
+    // })
+
+    // // like
+    // .addCase(__likeHeart.pending, (state) => {
+    //   state.isLoading = true
+    // })
+    // .addCase(__likeHeart.fulfilled, (state) =>{
+    //   state.isLoading = false
+    // })
+    // .addCase(__likeHeart.rejected, (state) => {
     //   state.isLoading = false
     //   state.error = action.payload
     // })
