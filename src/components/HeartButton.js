@@ -20,7 +20,7 @@ const HeartButton = () => {
 
   // useEffect(() => {
   //   dispatch(__likeHeart);
-  // }, [like]);
+  // }, []);
 
   return (
     <div>

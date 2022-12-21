@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-// import { __deletePost, __editPost } from "../redux/modules/postSlice";
-import { __createGet } from "../redux/modules/postSlice";
+import { __deletePost, __createGet } from "../redux/modules/postSlice";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Comment from "./Comment";
 import HeartButton from "./HeartButton";
 
@@ -12,17 +11,26 @@ const DetailCard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const detailParams = useParams();
+
   const { post } = useSelector((state) => state.post);
+  console.log(post);
+  // const nickname = useSelector((state) => state.nickCheck.nickname);
+  // console.log(nickname);
+
+  const DeleteButton = () => {
+    dispatch(__deletePost(detailParams));
+  };
 
   useEffect(() => {
-    dispatch(__createGet());
+    dispatch(__createGet(detailParams));
   }, []);
 
   return (
     <>
       <div>
         <div>
-          <DetailButtonTop onClick={() => navigate("/main")}>
+          <DetailButtonTop onClick={() => navigate("/main/0")}>
             back
           </DetailButtonTop>
           <DetailButtonTop2 onClick={() => navigate("/log")}>
@@ -31,11 +39,14 @@ const DetailCard = () => {
         </div>
         <DetailCardWrapper>
           <DetailNicknameCarrier>
-            <div> nickname </div>
-            <div> {post?.postId} </div>
+            <div> {post?.userNickname} </div>
+            <div> {post?.categoryId} </div>
           </DetailNicknameCarrier>
 
-          <DetailImageCarrier alt="" />
+          <DetailImageCarrier
+          // src={imageUrl}
+          // style={{ width: "300px", height: "320px" }}
+          />
 
           <HeartButton />
           <DetailTitleCarrier>{post?.title}</DetailTitleCarrier>
@@ -43,7 +54,7 @@ const DetailCard = () => {
         </DetailCardWrapper>
         <div>
           <DetailButtonEdit> Edit </DetailButtonEdit>
-          <DetailButtonDEL> Delete </DetailButtonDEL>
+          <DetailButtonDEL onClick={DeleteButton}> Delete </DetailButtonDEL>
         </div>
       </div>
       <Comment />
@@ -84,7 +95,6 @@ const DetailContentCarrier = styled.div`
   border: 0.5px;
   min-height: max-content;
 `;
-
 const DetailButtonTop = styled.div`
   margin: 10px 0 0 -140px;
   position: absolute;
@@ -103,7 +113,6 @@ const DetailButtonTop2 = styled.div`
     border: 1px solid black;
   }
 `;
-
 const DetailButtonDEL = styled.div`
   margin: 10px 0 0 260px;
   position: absolute;

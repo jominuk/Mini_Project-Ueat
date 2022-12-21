@@ -15,6 +15,7 @@ const CreatePost = () => {
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+
   const [Open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
 
