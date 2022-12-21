@@ -73,6 +73,7 @@ const StLink = styled(Link)`
 `;
 
 const StLog = styled.div`
+  display: flex;
   font-size: 50px;
   position: absolute;
   justify-content: flex-end;

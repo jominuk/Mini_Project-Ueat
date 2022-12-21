@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 // import { __deletePost, __editPost } from "../redux/modules/postSlice";
-import { __createGet } from "../redux/modules/postSlice";
+import { __createGet, __deletePost } from "../redux/modules/postSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Comment from "./Comment";
@@ -19,14 +19,14 @@ const DetailCard = () => {
   // const [input, setInput] = useState("");
 
   // //수정완료버튼
-  // const onEditComplete = (editID) => {
-  //   dispatch(__editPost({ id: editID, title, content: input }));
+  // const onEditComplete = () => {
+  //   dispatch(__editPost(editOn));
   //   setEditOn("");
   // };
 
-  // const DeleteButton = () => {
-  //   dispatch(__deletePost(id));
-  // };
+  const DeleteButton = () => {
+    dispatch(__deletePost(47));
+  };
 
   useEffect(() => {
     dispatch(__createGet());
@@ -52,12 +52,16 @@ const DetailCard = () => {
           <DetailImageCarrier alt="" />
 
           <HeartButton />
+
           <DetailTitleCarrier>{post?.title}</DetailTitleCarrier>
           <DetailContentCarrier>{post?.content}</DetailContentCarrier>
         </DetailCardWrapper>
         <div>
           <DetailButtonEdit> Edit </DetailButtonEdit>
-          <DetailButtonDEL> Delete </DetailButtonDEL>
+          <DetailButtonDEL onClick={() => DeleteButton()}>
+            {" "}
+            Delete{" "}
+          </DetailButtonDEL>
         </div>
       </div>
       <Comment />
@@ -65,12 +69,8 @@ const DetailCard = () => {
   );
 };
 
-// return (
-//   <>
-//     <div>
-//       {post.map((edit) => {
-//         // editOn 아이디랑 비교해서 일치하는 3항 연산자로 인풋창 바꾸기
-//         return edit.id === editOn ? (
+//
+//         return edit === editOn ? (
 //           <div>
 //             <DetailCardWrapper>
 //               <DetailNicknameCarrier> {nickname} </DetailNicknameCarrier>
@@ -82,10 +82,9 @@ const DetailCard = () => {
 //               <DetailContentCarrier> {post.content} </DetailContentCarrier>
 //             </DetailCardWrapper>
 //             <div>
-//               <DetailButtonEdit onClick={() => onEditComplete(el.id)}>
+//               <DetailButtonEdit onClick={() => onEditComplete(edit)}>
 //                 completion
 //               </DetailButtonEdit>
-//               {/* 새롭게 만들어 일치하는 post id가 없게 만들기 */}
 //               <DetailButtonDEL onClick={() => setEditOn("")}>
 //                 Cancel
 //               </DetailButtonDEL>
