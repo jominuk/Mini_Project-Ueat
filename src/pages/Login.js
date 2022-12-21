@@ -73,7 +73,7 @@ const Login = () => {
             value={pw}
           />
           <StError>
-            {!passwordValid && pw.length > 0 && (
+            {!passwordValid && (
               <div>영문, 숫자 포함 8자 이상 입력해주세요.</div>
             )}
           </StError>
