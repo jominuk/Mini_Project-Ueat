@@ -22,21 +22,44 @@ const Comment = ({ id }) => {
   };
 
   return (
-    <div>
+    <CommentBoxStruc>
       <StCommentBox>
-        <input type="text" name="comment" onChange={inputHandler} />
+        <InputBox
+          type="text"
+          name="comment"
+          onChange={inputHandler}
+          placeholder="댓글작성"
+        />
         <button onClick={onClickHandler}> 작성 </button>
       </StCommentBox>
-    </div>
+    </CommentBoxStruc>
   );
 };
 
 export default Comment;
 
-const StCommentBox = styled.div`
+const InputBox = styled.input`
+  width: 600px;
+  height: 30px;
+`;
+
+const CommentBoxStruc = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 50px;
-  gap: 30px;
+  width: 800px;
+  height: 50%;
+`;
+const StCommentBox = styled.div`
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  margin: 60px;
+  width: 100%;
+  border: 2px solid moccasin;
+  border-radius: 10px;
+  /* margin: 8px 0; */
+  outline: none;
+  padding: 8px;
+  box-sizing: border-box;
+  transition: 0.3s;
 `;
