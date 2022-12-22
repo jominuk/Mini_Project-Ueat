@@ -10,14 +10,19 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Comment from "./Comment";
 import HeartButton from "./HeartButton";
+import CommentList from "./CommentList";
+import { __getComment } from "../redux/modules/commentSlice";
 
 const DetailCard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { id } = useParams();
+  const detailParams = useParams();
 
   const { post } = useSelector((state) => state.post);
+  // const nickname = useSelector((state) => state.nickCheck.nickname);
+  // console.log(nickname);
+  const { commentList } = useSelector((state) => state.commentPost);
   console.log(post);
 
   const [edit, setEdit] = useState(""); //수정버튼 클릭 시
@@ -42,6 +47,8 @@ const DetailCard = () => {
     console.log(input);
   };
 
+  // const DeleteButton = () => {
+  //   dispatch(__deletePost(id));
   const DeleteButton = async () => {
     const deleteComplte = await dispatch(__deletePost(id));
     if (deleteComplte.payload !== "") {
@@ -52,7 +59,16 @@ const DetailCard = () => {
 
   useEffect(() => {
     dispatch(__createGet(id));
+    dispatch(__createGet(id));
   }, []);
+
+  useEffect(() => {
+    dispatch(__getComment(id));
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(__getComment(id));
+  }, [dispatch]);
 
   return id === edit ? (
     <>
@@ -99,7 +115,7 @@ const DetailCard = () => {
           </DetailButtonEdit>
           <DetailButtonDEL onClick={() => setEdit("")}>
             {" "}
-            Cancle{" "}
+            Cancel{" "}
           </DetailButtonDEL>
         </div>
       </div>
@@ -109,7 +125,7 @@ const DetailCard = () => {
     <>
       <div>
         <div>
-          <DetailButtonTop onClick={() => navigate(`/main/:id`)}>
+          <DetailButtonTop onClick={() => navigate("/main/:id")}>
             back
           </DetailButtonTop>
           <DetailButtonTop2 onClick={() => navigate("/log")}>
@@ -142,7 +158,12 @@ const DetailCard = () => {
           <DetailButtonDEL onClick={DeleteButton}> Delete </DetailButtonDEL>
         </div>
       </div>
-      <Comment />
+      <Comment id={id} />
+      {commentList?.map((el, i) => {
+        return (
+          <CommentList key={`main-comment-${i}`} id={id} el={el}></CommentList>
+        );
+      })}
     </>
   );
 };
