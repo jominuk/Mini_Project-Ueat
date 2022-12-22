@@ -75,7 +75,7 @@ const DetailCard = () => {
 
   useEffect(() => {
     dispatch(__getComment(id));
-  }, [dispatch]);
+  }, []);
 
   return id === edit ? (
     <>
