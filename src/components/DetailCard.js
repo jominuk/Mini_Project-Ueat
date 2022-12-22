@@ -12,6 +12,8 @@ import Comment from "./Comment";
 import HeartButton from "./HeartButton";
 import CommentList from "./CommentList";
 import { __getComment } from "../redux/modules/commentSlice";
+import { deleteCookie } from "../shared/cookie";
+import { loginCheck } from "../redux/modules/userSlice";
 
 const DetailCard = () => {
   const dispatch = useDispatch();
@@ -22,6 +24,7 @@ const DetailCard = () => {
   console.log(post.categoryId);
 
   const { commentList } = useSelector((state) => state.commentPost);
+  const { login } = useSelector((state) => state.user);
   console.log(post);
 
   const [edit, setEdit] = useState(""); //수정버튼 클릭 시
@@ -38,6 +41,14 @@ const DetailCard = () => {
       })
     );
     setEdit("");
+  };
+
+  const logoutButton = () => {
+    const a = dispatch(loginCheck(false));
+    if (a.payload === false) {
+      deleteCookie("token");
+      deleteCookie("nickname");
+    }
   };
 
   const onChangeInput = (e) => {
@@ -76,9 +87,17 @@ const DetailCard = () => {
           <DetailButtonTop onClick={() => navigate(`/main/${post.categoryId}`)}>
             back
           </DetailButtonTop>
-          <DetailButtonTop2 onClick={() => navigate("/log")}>
-            signin
-          </DetailButtonTop2>
+          {!login ? (
+            <DetailButtonTop2
+              onClick={() => {
+                navigate("/log");
+              }}
+            >
+              Login
+            </DetailButtonTop2>
+          ) : (
+            <DetailButtonTop2 onClick={logoutButton}>Logout</DetailButtonTop2>
+          )}
         </div>
         <DetailCardWrapper>
           <DetailNicknameCarrier>
@@ -127,9 +146,17 @@ const DetailCard = () => {
           <DetailButtonTop onClick={() => navigate(`/main/${post.categoryId}`)}>
             back
           </DetailButtonTop>
-          <DetailButtonTop2 onClick={() => navigate("/log")}>
-            signin
-          </DetailButtonTop2>
+          {!login ? (
+            <DetailButtonTop2
+              onClick={() => {
+                navigate("/log");
+              }}
+            >
+              Login
+            </DetailButtonTop2>
+          ) : (
+            <DetailButtonTop2 onClick={logoutButton}>Logout</DetailButtonTop2>
+          )}
         </div>
         <DetailCardWrapper>
           <DetailNicknameCarrier>
