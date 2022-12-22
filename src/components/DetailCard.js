@@ -43,11 +43,12 @@ const DetailCard = () => {
     setEdit("");
   };
 
+  const nickname = localStorage.getItem("nickname");
+
   const logoutButton = () => {
     const a = dispatch(loginCheck(false));
     if (a.payload === false) {
       deleteCookie("token");
-      deleteCookie("nickname");
     }
   };
 
@@ -71,10 +72,6 @@ const DetailCard = () => {
     dispatch(__createGet(id));
     dispatch(__createGet(id));
   }, []);
-
-  useEffect(() => {
-    dispatch(__getComment(id));
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(__getComment(id));
@@ -126,18 +123,19 @@ const DetailCard = () => {
           />
         </DetailCardWrapper>
 
-        <div>
-          <DetailButtonEdit onClick={() => editComplete(id)}>
-            {" "}
-            Complete{" "}
-          </DetailButtonEdit>
-          <DetailButtonDEL onClick={() => setEdit("")}>
-            {" "}
-            Cancel{" "}
-          </DetailButtonDEL>
-        </div>
+        {post.userNickname === nickname ? (
+          <div>
+            <DetailButtonEdit onClick={() => editComplete(id)}>
+              {" "}
+              Complete{" "}
+            </DetailButtonEdit>
+            <DetailButtonDEL onClick={() => setEdit("")}>
+              {" "}
+              Cancel{" "}
+            </DetailButtonDEL>
+          </div>
+        ) : null}
       </div>
-      <Comment />
     </>
   ) : (
     <>
@@ -172,17 +170,19 @@ const DetailCard = () => {
           <DetailTitleCarrier>{post?.title}</DetailTitleCarrier>
           <DetailContentCarrier>{post?.content}</DetailContentCarrier>
         </DetailCardWrapper>
-        <div>
-          <DetailButtonEdit
-            onClick={() => {
-              setEdit(id);
-            }}
-          >
-            {" "}
-            Edit{" "}
-          </DetailButtonEdit>
-          <DetailButtonDEL onClick={DeleteButton}> Delete </DetailButtonDEL>
-        </div>
+        {post.userNickname === nickname ? (
+          <div>
+            <DetailButtonEdit
+              onClick={() => {
+                setEdit(id);
+              }}
+            >
+              {" "}
+              Edit{" "}
+            </DetailButtonEdit>
+            <DetailButtonDEL onClick={DeleteButton}> Delete </DetailButtonDEL>
+          </div>
+        ) : null}
       </div>
       <Comment id={id} />
       {commentList?.map((el, i) => {

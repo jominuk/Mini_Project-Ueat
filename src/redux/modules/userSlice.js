@@ -9,10 +9,12 @@ export const __loginUser = createAsyncThunk(
     try {
       setToken();
       const { data } = await instance.post("/auth/login", payload);
+      console.log(data.nickname);
       setCookie("token", data.token, {
         path: "/",
         expire: "after60m",
       });
+      localStorage.setItem("nickname", data.nickname);
       alert("로그인 성공!");
       return thunkAPI.fulfillWithValue(payload);
     } catch ({ response }) {
