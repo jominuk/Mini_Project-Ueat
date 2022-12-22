@@ -5,7 +5,6 @@ import MainPostCard from "../components/MainPostCard";
 // import { useDispatch, useSelector } from "react-redux";
 // import { __getPosts } from "../redux/modules/postSlice";
 import { useNavigate, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCookie, getCookie } from "../shared/cookie";
 import { loginCheck } from "../redux/modules/userSlice";
