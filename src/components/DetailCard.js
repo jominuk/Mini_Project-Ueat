@@ -70,7 +70,6 @@ const DetailCard = () => {
 
   useEffect(() => {
     dispatch(__createGet(id));
-    dispatch(__createGet(id));
   }, []);
 
   useEffect(() => {
@@ -142,7 +141,7 @@ const DetailCard = () => {
       <div>
         <div>
           <DetailButtonTop onClick={() => navigate(`/main/${post.categoryId}`)}>
-            back
+            Back
           </DetailButtonTop>
           {!login ? (
             <DetailButtonTop2
@@ -184,12 +183,18 @@ const DetailCard = () => {
           </div>
         ) : null}
       </div>
-      <Comment id={id} />
-      {commentList?.map((el, i) => {
-        return (
-          <CommentList key={`main-comment-${i}`} id={id} el={el}></CommentList>
-        );
-      })}
+      <div>
+        <Comment id={id} />
+        {commentList?.map((el, i) => {
+          return (
+            <CommentList
+              key={`main-comment-${i}`}
+              id={id}
+              el={el}
+            ></CommentList>
+          );
+        })}
+      </div>
     </>
   );
 };
@@ -228,42 +233,45 @@ const DetailContentCarrier = styled.div`
   border: 0.5px;
   min-height: max-content;
 `;
-const DetailButtonTop = styled.div`
+const DetailButtonTop = styled.button`
   margin: 10px 0 0 -140px;
   position: absolute;
-  font-size: 20px;
+  font-size: 22px;
   border-radius: 12px;
   :hover {
-    border: 1px solid black;
+    border: 3px solid black;
   }
 `;
-const DetailButtonTop2 = styled.div`
+const DetailButtonTop2 = styled.button`
   margin: 10px 0 0 760px;
   position: absolute;
   font-size: 20px;
   border-radius: 12px;
   :hover {
-    border: 1px solid black;
+    border: 3px solid black;
   }
 `;
-const DetailButtonDEL = styled.div`
+const DetailButtonDEL = styled.button`
   margin: 10px 0 0 260px;
   position: absolute;
   font-size: 20px;
   border-radius: 12px;
   cursor: pointer;
   :hover {
-    border: 1px solid black;
+    border: 3px solid black;
   }
 `;
-const DetailButtonEdit = styled.div`
+const DetailButtonEdit = styled.button`
   margin: 10px 0 0 340px;
   position: absolute;
   font-size: 20px;
   border-radius: 12px;
   :hover {
-    border: 1px solid black;
+    border: 3px solid black;
   }
+`;
+const CommentBorder = styled.div`
+  border-top: 1px solid black;
 `;
 
 export default DetailCard;
