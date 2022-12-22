@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import MainPostCard from "../components/MainPostCard";
-// import { useState, useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { __getPosts } from "../redux/modules/postSlice";
 import { useNavigate, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCookie, getCookie } from "../shared/cookie";
 import { loginCheck } from "../redux/modules/userSlice";
@@ -47,6 +43,14 @@ const MainPost = () => {
     <>
       <WholeCard>
         <ButtonGroup>
+          <HomeButton
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            홈으로
+          </HomeButton>
+
           <ButtonTop onClick={ClickKorean} type="button" name="">
             한식
           </ButtonTop>
@@ -148,6 +152,16 @@ const SigninButton = styled.button`
   position: absolute;
   font-size: 15px;
   border-color: grey;
+  border-radius: 12px;
+  :hover {
+    border: 1px solid black;
+  }
+`;
+
+const HomeButton = styled.button`
+  margin: 200px 920px 0 0px;
+  position: absolute;
+  font-size: 20px;
   border-radius: 12px;
   :hover {
     border: 1px solid black;

@@ -1,7 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { __deletePost, __createGet } from "../redux/modules/postSlice";
+import {
+  __deletePost,
+  __createGet,
+  __editPost,
+} from "../redux/modules/postSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Comment from "./Comment";
@@ -11,22 +15,46 @@ const DetailCard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const detailParams = useParams();
+  const { id } = useParams();
 
   const { post } = useSelector((state) => state.post);
   console.log(post);
-  // const nickname = useSelector((state) => state.nickCheck.nickname);
-  // console.log(nickname);
 
-  const DeleteButton = () => {
-    dispatch(__deletePost(detailParams));
+  const [edit, setEdit] = useState(""); //수정버튼 클릭 시
+  const [input, setInput] = useState({}); // 인풋으로 바꾸게
+
+  const editComplete = () => {
+    console.log();
+    dispatch(
+      __editPost({
+        title: input.title,
+        content: input.content,
+        categoryId: post.categoryId,
+        postId: post.postId,
+      })
+    );
+    setEdit("");
+  };
+
+  const onChangeInput = (e) => {
+    const { value, name } = e.target;
+    setInput({ ...input, [name]: value });
+    console.log(input);
+  };
+
+  const DeleteButton = async () => {
+    const deleteComplte = await dispatch(__deletePost(id));
+    if (deleteComplte.payload !== "") {
+      alert("삭제완료");
+      navigate("/main/0");
+    }
   };
 
   useEffect(() => {
-    dispatch(__createGet(detailParams));
+    dispatch(__createGet(id));
   }, []);
 
-  return (
+  return id === edit ? (
     <>
       <div>
         <div>
@@ -40,12 +68,62 @@ const DetailCard = () => {
         <DetailCardWrapper>
           <DetailNicknameCarrier>
             <div> {post?.userNickname} </div>
-            <div> {post?.categoryId} </div>
           </DetailNicknameCarrier>
 
           <DetailImageCarrier
-          // src={imageUrl}
-          // style={{ width: "300px", height: "320px" }}
+            src={post?.imageUrl}
+            style={{ width: "300px", height: "320px" }}
+          />
+
+          <HeartButton />
+
+          <input
+            onChange={onChangeInput}
+            name="title"
+            value={input.title}
+            placeholder={post.title}
+          />
+
+          <input
+            onChange={onChangeInput}
+            name="content"
+            value={input.content}
+            placeholder={post.content}
+          />
+        </DetailCardWrapper>
+
+        <div>
+          <DetailButtonEdit onClick={() => editComplete(id)}>
+            {" "}
+            Complete{" "}
+          </DetailButtonEdit>
+          <DetailButtonDEL onClick={() => setEdit("")}>
+            {" "}
+            Cancle{" "}
+          </DetailButtonDEL>
+        </div>
+      </div>
+      <Comment />
+    </>
+  ) : (
+    <>
+      <div>
+        <div>
+          <DetailButtonTop onClick={() => navigate(`/main/:id`)}>
+            back
+          </DetailButtonTop>
+          <DetailButtonTop2 onClick={() => navigate("/log")}>
+            signin
+          </DetailButtonTop2>
+        </div>
+        <DetailCardWrapper>
+          <DetailNicknameCarrier>
+            <div> {post?.userNickname} </div>
+          </DetailNicknameCarrier>
+
+          <DetailImageCarrier
+            src={post?.imageUrl}
+            style={{ width: "300px", height: "320px" }}
           />
 
           <HeartButton />
@@ -53,7 +131,14 @@ const DetailCard = () => {
           <DetailContentCarrier>{post?.content}</DetailContentCarrier>
         </DetailCardWrapper>
         <div>
-          <DetailButtonEdit> Edit </DetailButtonEdit>
+          <DetailButtonEdit
+            onClick={() => {
+              setEdit(id);
+            }}
+          >
+            {" "}
+            Edit{" "}
+          </DetailButtonEdit>
           <DetailButtonDEL onClick={DeleteButton}> Delete </DetailButtonDEL>
         </div>
       </div>
@@ -65,9 +150,10 @@ const DetailCard = () => {
 const DetailCardWrapper = styled.div`
   width: 600px;
   height: 550px;
-  border: 1px solid black;
+  border: 3px solid black;
   border-radius: 14px;
   margin: 100px 0 0 35px;
+  text-align: center;
 `;
 const DetailNicknameCarrier = styled.div`
   display: flex;
@@ -118,6 +204,7 @@ const DetailButtonDEL = styled.div`
   position: absolute;
   font-size: 20px;
   border-radius: 12px;
+  cursor: pointer;
   :hover {
     border: 1px solid black;
   }

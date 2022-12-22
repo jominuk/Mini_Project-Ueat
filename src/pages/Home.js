@@ -12,7 +12,6 @@ const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { login } = useSelector((state) => state.user);
-  console.log(login);
 
   const onLogout = () => {
     const a = dispatch(loginCheck(false));

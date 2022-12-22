@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  createAsyncThunk,
+  createSlice,
+} from "@reduxjs/toolkit";
 import { instance } from "../../instance/instance";
 import setToken from "../../Pattern/setToken";
 import { getCookie } from "../../shared/cookie";
@@ -48,7 +52,6 @@ export const __createGet = createAsyncThunk(
 export const __deletePost = createAsyncThunk(
   "DELETE_POST",
   async (payload, thunkAPI) => {
-    console.log(payload);
     try {
       const accessToken = getCookie("token");
       setToken(accessToken);
@@ -63,15 +66,16 @@ export const __deletePost = createAsyncThunk(
 // 수정
 export const __editPost = createAsyncThunk(
   "EDIT_POST",
-  async (payload, thunkAPI) => {
+  async ({ postId, title, content, categoryId }, thunkAPI) => {
     try {
       const accessToken = getCookie("token");
       setToken(accessToken);
-      const edited = await instance.patch(`/posts/`, {
-        title: payload.title,
-        content: payload.content,
+      const edited = await instance.patch(`/posts/${postId}`, {
+        title,
+        content,
+        categoryId,
       });
-      return thunkAPI.fulfillWithValue(edited.data);
+      return thunkAPI.fulfillWithValue({ title, content });
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -83,8 +87,10 @@ export const __likeHeart = createAsyncThunk(
   "LIKE_HEART",
   async (payload, thunkAPI) => {
     try {
-      const like = await instance.post(`post/`);
-      return thunkAPI.fulfillWithValue(like.data);
+      const accessToken = getCookie("token");
+      setToken(accessToken);
+      const { data } = await instance.post(`/like/posts/${payload}`);
+      return thunkAPI.fulfillWithValue(data.message);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -143,9 +149,8 @@ const postSlice = createSlice({
       .addCase(__deletePost.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(__deletePost.fulfilled, (state, action) => {
+      .addCase(__deletePost.fulfilled, (state) => {
         state.isLoading = false;
-        state.post = state.post.filter((post) => post.id !== action.payload);
       })
       .addCase(__deletePost.rejected, (state, action) => {
         state.isLoading = false;
@@ -158,9 +163,11 @@ const postSlice = createSlice({
       })
       .addCase(__editPost.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.post = state.post.map((user) =>
-          user.id === action.payload.id ? action.payload : user
-        );
+        state.post = {
+          ...state.post,
+          title: action.payload.title,
+          content: action.payload.content,
+        };
       })
       .addCase(__editPost.rejected, (state, action) => {
         state.isLoading = false;
@@ -171,8 +178,15 @@ const postSlice = createSlice({
       .addCase(__likeHeart.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(__likeHeart.fulfilled, (state) => {
+      .addCase(__likeHeart.fulfilled, (state, action) => {
         state.isLoading = false;
+        if (action.payload === "등록 완료") {
+          state.post.isLiked = true;
+          state.post.likesNum = state.post.likesNum + 1;
+        } else {
+          state.post.isLiked = false;
+          state.post.likesNum = state.post.likesNum - 1;
+        }
       })
       .addCase(__likeHeart.rejected, (state, action) => {
         state.isLoading = false;

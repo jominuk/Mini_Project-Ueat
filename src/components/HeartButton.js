@@ -1,31 +1,22 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-// import { useDispatch, useEffect } from "react-redux";
-// import { __likeHeart } from "../redux/modules/postSlice";
+import { useDispatch } from "react-redux";
+import { __likeHeart } from "../redux/modules/postSlice";
+import { useSelector } from "react-redux";
 
 const HeartButton = () => {
-  const [like, setLike] = useState(false);
-  const [count, setCount] = useState(0);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  const likeButton = () => {
-    if (like === true) {
-      setCount(count - 1);
-      setLike(false);
-    } else {
-      setCount(count + 1);
-      setLike(true);
-    }
+  const { post } = useSelector((state) => state.post);
+
+  const likeButton = async () => {
+    const isLike = await dispatch(__likeHeart(post.postId));
   };
-
-  // useEffect(() => {
-  //   dispatch(__likeHeart);
-  // }, []);
 
   return (
     <div>
-      <LikeButton onClick={likeButton}>{like ? "❤️" : "🤍"}</LikeButton>
-      <span> {count} </span>
+      <LikeButton onClick={likeButton}>{post.isLiked ? "❤️" : "🤍"}</LikeButton>
+      <span>{post.likesNum}</span>
     </div>
   );
 };

@@ -34,7 +34,6 @@ const Signup = () => {
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
-    console.log(input);
     switch (name) {
       case "nickname":
         if (value.length > 2 && value.length < 20) {
@@ -119,6 +118,16 @@ const Signup = () => {
       <LeftImage></LeftImage>
       <Main>
         <Stdiv>
+          <StBackButton>
+            <StyledButton
+              onClick={() => {
+                navigate("/log");
+              }}
+            >
+              {" "}
+              이전으로{" "}
+            </StyledButton>
+          </StBackButton>
           <StHead>회원가입</StHead>
           <div>
             <StyledInput
@@ -229,6 +238,10 @@ const ButtonArea = styled.div`
   display: flex;
   justify-content: center;
   gap: 7px;
+`;
+
+const StBackButton = styled.div`
+  display: flex;
 `;
 
 // const ButtonWrapper = styled.div`
