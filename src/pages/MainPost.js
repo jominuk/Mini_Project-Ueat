@@ -21,7 +21,9 @@ const MainPost = () => {
 
   const logoutButton = () => {
     const a = dispatch(loginCheck(false));
-    if (a.payload === false) deleteCookie("token");
+    if (a.payload === false) {
+      deleteCookie("token");
+    }
   };
   const { postList } = useSelector((state) => state.post);
 

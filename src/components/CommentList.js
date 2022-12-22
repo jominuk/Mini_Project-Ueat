@@ -7,10 +7,6 @@ import { __deleteComment, __patchComment } from "../redux/modules/commentSlice";
 const CommentList = ({ id, el }) => {
   const dispatch = useDispatch();
   const { commentList } = useSelector((state) => state.commentPost);
-  console.log(
-    "🚀 ~ file: CommentList.js:10 ~ CommentList ~ commentList",
-    commentList
-  );
 
   const comm = commentList.find((item) => {
     return item.id === parseInt(id);
@@ -19,9 +15,10 @@ const CommentList = ({ id, el }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const [inputChange, setInputChange] = useState({ comment: "" });
+  console.log(commentList);
 
-  const delClickHandler = () => {
-    dispatch(__deleteComment({}));
+  const delClickHandler = (id) => {
+    dispatch(__deleteComment(id));
   };
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
@@ -48,7 +45,9 @@ const CommentList = ({ id, el }) => {
         )}
         <button
           type="button"
-          onClick={isEditing ? toggleEditing : () => delClickHandler(id)}
+          onClick={
+            isEditing ? toggleEditing : () => delClickHandler(el.commentId)
+          }
         >
           {isEditing ? "취소하기" : "삭제하기"}
         </button>

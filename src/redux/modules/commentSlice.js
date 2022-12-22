@@ -56,11 +56,10 @@ export const __deleteComment = createAsyncThunk(
   "DEL_POST",
   async (payload, thunkAPI) => {
     try {
-      console.log(payload);
       const accessToken = getCookie("token");
       setToken(accessToken);
-      await instance.delete(`/comments/${payload.id}`);
-      return thunkAPI.fulfillWithValue(data);
+      await instance.delete(`/comments/${payload}`);
+      return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -126,7 +125,7 @@ const commentSlice = createSlice({
     },
     [__deleteComment.fulfilled]: (state, action) => {
       state.commentList = state.commentList.filter(
-        (data) => data.id !== action.payload
+        (data) => data.commentId !== action.payload
       );
       // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
