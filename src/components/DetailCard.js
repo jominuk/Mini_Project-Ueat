@@ -46,8 +46,6 @@ const DetailCard = () => {
     console.log(input);
   };
 
-  // const DeleteButton = () => {
-  //   dispatch(__deletePost(id));
   const DeleteButton = async () => {
     const deleteComplte = await dispatch(__deletePost(id));
     if (deleteComplte.payload !== "") {
@@ -58,14 +56,6 @@ const DetailCard = () => {
 
   useEffect(() => {
     dispatch(__createGet(id));
-    dispatch(__createGet(id));
-  }, []);
-
-  useEffect(() => {
-    dispatch(__getComment(id));
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(__getComment(id));
   }, [dispatch]);
 
@@ -87,7 +77,7 @@ const DetailCard = () => {
 
           <DetailImageCarrier
             src={post?.imageUrl}
-            style={{ width: "300px", height: "320px" }}
+            style={{ width: "320px", height: "230px" }}
           />
 
           <HeartButton />
