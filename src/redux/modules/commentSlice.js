@@ -25,7 +25,6 @@ export const __postComment = createAsyncThunk(
   "POST_POST",
   async (payload, thunkAPI) => {
     try {
-      console.log(payload);
       const accessToken = getCookie("token");
       setToken(accessToken);
       await instance.post(`/posts/${payload.id}/comments`, {
@@ -44,8 +43,10 @@ export const __patchComment = createAsyncThunk(
     try {
       const accessToken = getCookie("token");
       setToken(accessToken);
-      await instance.patch(`/comments/${payload.id}`);
-      return thunkAPI.fulfillWithValue(data);
+      await instance.patch(`/comments/${payload.id}`, {
+        content: payload.inputChange,
+      });
+      return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -56,11 +57,10 @@ export const __deleteComment = createAsyncThunk(
   "DEL_POST",
   async (payload, thunkAPI) => {
     try {
-      console.log(payload);
       const accessToken = getCookie("token");
       setToken(accessToken);
-      await instance.delete(`/comments/${payload.id}`);
-      return thunkAPI.fulfillWithValue(data);
+      await instance.delete(`/comments/${payload}`);
+      return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -102,18 +102,11 @@ const commentSlice = createSlice({
       state.isLoading = true; // 네트워크 요청이 시작되면 로딩상태를 true로 변경합니다.
     },
     [__patchComment.fulfilled]: (state, action) => {
-      const newComment = [...state.commentList];
-      state.commentList = newComment.map((comm) => {
-        if (comm.id === parseInt(action.payload)) {
-          return {
-            ...comm,
-            content: action.payload,
-          };
-        } else {
-          return comm;
-        }
-      });
-      console.log(action.payload.id);
+      state.commentList = state.commentList.map((el) =>
+        el.id === action.payload.id
+          ? { ...el, content: action.payload.inputChange }
+          : el
+      );
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
     },
     [__patchComment.rejected]: (state, action) => {
@@ -126,7 +119,7 @@ const commentSlice = createSlice({
     },
     [__deleteComment.fulfilled]: (state, action) => {
       state.commentList = state.commentList.filter(
-        (data) => data.id !== action.payload
+        (data) => data.commentId !== action.payload
       );
       // Store에 있는 todos에 서버에서 가져온 todos를 넣습니다.
       state.isLoading = false; // 네트워크 요청이 끝났으니, false로 변경합니다.
