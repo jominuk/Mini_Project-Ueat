@@ -11,19 +11,18 @@ const DetailCard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const detailParams = useParams();
+  const { id } = useParams();
 
   const { post } = useSelector((state) => state.post);
-  console.log(post);
   // const nickname = useSelector((state) => state.nickCheck.nickname);
   // console.log(nickname);
 
   const DeleteButton = () => {
-    dispatch(__deletePost(detailParams));
+    dispatch(__deletePost(id));
   };
 
   useEffect(() => {
-    dispatch(__createGet(detailParams));
+    dispatch(__createGet(id));
   }, []);
 
   return (
@@ -44,8 +43,8 @@ const DetailCard = () => {
           </DetailNicknameCarrier>
 
           <DetailImageCarrier
-          // src={imageUrl}
-          // style={{ width: "300px", height: "320px" }}
+            src={post?.imageUrl}
+            style={{ width: "300px", height: "320px" }}
           />
 
           <HeartButton />

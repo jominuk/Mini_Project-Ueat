@@ -21,6 +21,15 @@ const Login = () => {
     }
   }, [login]);
 
+  useEffect(() => {
+    if (pw.length > 7) {
+      setPasswordValid(true);
+    } else {
+      console.log(pw.length, passwordValid);
+      setPasswordValid(false);
+    }
+  }, [pw]);
+
   const loginHandler = () => {
     dispatch(
       __loginUser({
@@ -42,11 +51,6 @@ const Login = () => {
   };
 
   const handlePw = (e) => {
-    if (pw.length >= 7) {
-      setPasswordValid(true);
-    } else {
-      setPasswordValid(false);
-    }
     setPw(e.target.value);
   };
 
