@@ -6,10 +6,14 @@ import { StyledButton } from "../components/Button";
 import { StyledImage } from "../components/Image";
 import { StyledInput } from "../components/Input";
 import { __createPost } from "../redux/modules/postSlice";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const CreatePost = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { login } = useSelector((state) => state.user);
 
   const [preview, setPreview] = useState(null);
   const [image, setImage] = useState(null);
@@ -18,6 +22,12 @@ const CreatePost = () => {
 
   const [Open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+
+  useEffect(() => {
+    if (!login) {
+      navigate("/log");
+    }
+  }, []);
 
   const selectMenu = () => setOpen(!Open);
   const options = ["한식", "중식", "일식", "양식", "기타"];
@@ -41,16 +51,12 @@ const CreatePost = () => {
     formData.append("content", content);
     formData.append("categoryId", options.indexOf(selectedOption));
     for (let key of formData.keys()) {
-      console.log(key);
     }
     const a = await dispatch(__createPost(formData));
     if (a.payload.message === "작성 완료") {
       alert("작성 완료");
       navigate("/main/0");
     }
-
-    // result.status ===200 ?
-    // alert("작성완료!")
   };
 
   return (
@@ -97,7 +103,18 @@ const CreatePost = () => {
             />
             <StyledImage src={preview} />
           </div>
-          <StyledButton>추가하기</StyledButton>
+          <StButtonGroup>
+            <StyledButton
+              onClick={() => {
+                navigate("/main/0");
+              }}
+            >
+              {" "}
+              홈으로{" "}
+            </StyledButton>
+
+            <StyledButton> 추가하기 </StyledButton>
+          </StButtonGroup>
         </Stform>
       </Stdiv>
     </Main>
@@ -182,4 +199,10 @@ const StDropDownList = styled.div`
 const StListItem = styled.div`
   margin: 8px;
   cursor: pointer;
+`;
+
+const StButtonGroup = styled.div`
+  margin-top: 10px;
+  display: flex;
+  gap: 30px;
 `;
