@@ -3,19 +3,21 @@ import styled from "styled-components";
 import MainPostCard from "../components/MainPostCard";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCookie, getCookie } from "../shared/cookie";
+import { deleteCookie } from "../shared/cookie";
 import { loginCheck } from "../redux/modules/userSlice";
 import { __getPostBox } from "../redux/modules/postSlice";
 
 const MainPost = () => {
   const { number } = useParams();
   useEffect(() => {
-    dispatch(__getPostBox(number));
+    dispatch(__getPostBox({ num: number, page: 1 }));
   }, []);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { login } = useSelector((state) => state.user);
+  const { pagesNum } = useSelector((state) => state.post);
+  const { categoryId } = useSelector((state) => state.post);
 
   const logoutButton = () => {
     const a = dispatch(loginCheck(false));
@@ -24,33 +26,25 @@ const MainPost = () => {
   const { postList } = useSelector((state) => state.post);
 
   const ClickKorean = () => {
-    dispatch(__getPostBox("0"));
+    dispatch(__getPostBox({ num: 0, page: 1 }));
   };
   const ClickChinese = () => {
-    dispatch(__getPostBox("1"));
+    dispatch(__getPostBox({ num: 1, page: 1 }));
   };
   const ClickJapanese = () => {
-    dispatch(__getPostBox("2"));
+    dispatch(__getPostBox({ num: 2, page: 1 }));
   };
   const ClickWestern = () => {
-    dispatch(__getPostBox("3"));
+    dispatch(__getPostBox({ num: 3, page: 1 }));
   };
   const ClickEtc = () => {
-    dispatch(__getPostBox("4"));
+    dispatch(__getPostBox({ num: 4, page: 1 }));
   };
 
   return (
     <>
       <WholeCard>
         <ButtonGroup>
-          <HomeButton
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            홈으로
-          </HomeButton>
-
           <ButtonTop onClick={ClickKorean} type="button" name="">
             한식
           </ButtonTop>
@@ -89,6 +83,21 @@ const MainPost = () => {
         </MainCardWrapper>
         <LeftHeader></LeftHeader>
       </WholeCard>
+
+      <Pagination>
+        {Array(pagesNum)
+          .fill("")
+          .map((el, i) => (
+            <button
+              key={`pagination_${i}`}
+              onClick={() =>
+                dispatch(__getPostBox({ num: categoryId, page: i + 1 }))
+              }
+            >
+              {i + 1}
+            </button>
+          ))}
+      </Pagination>
     </>
   );
 };
@@ -116,7 +125,7 @@ const ButtonTop = styled.button`
   width: 80px;
   border-radius: 25px;
   margin: 30px 0 0 35px;
-  transition: width 0.5s ease-in-out;
+  transition: 0.5s ease-in-out;
   font-size: 40px;
   :hover {
     width: 110px;
@@ -158,13 +167,8 @@ const SigninButton = styled.button`
   }
 `;
 
-const HomeButton = styled.button`
-  margin: 200px 920px 0 0px;
-  position: absolute;
-  font-size: 20px;
-  border-radius: 12px;
-  :hover {
-    border: 1px solid black;
-  }
+const Pagination = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 export default MainPost;

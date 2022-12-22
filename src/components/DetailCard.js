@@ -17,11 +17,10 @@ const DetailCard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-  const detailParams = useParams();
 
   const { post } = useSelector((state) => state.post);
-  // const nickname = useSelector((state) => state.nickCheck.nickname);
-  // console.log(nickname);
+  console.log(post.categoryId);
+
   const { commentList } = useSelector((state) => state.commentPost);
   console.log(post);
 
@@ -74,7 +73,7 @@ const DetailCard = () => {
     <>
       <div>
         <div>
-          <DetailButtonTop onClick={() => navigate("/main/0")}>
+          <DetailButtonTop onClick={() => navigate(`/main/${post.categoryId}`)}>
             back
           </DetailButtonTop>
           <DetailButtonTop2 onClick={() => navigate("/log")}>
@@ -125,7 +124,7 @@ const DetailCard = () => {
     <>
       <div>
         <div>
-          <DetailButtonTop onClick={() => navigate("/main/:id")}>
+          <DetailButtonTop onClick={() => navigate(`/main/${post.categoryId}`)}>
             back
           </DetailButtonTop>
           <DetailButtonTop2 onClick={() => navigate("/log")}>

@@ -9,12 +9,12 @@ import { getCookie } from "../../shared/cookie";
 
 export const __getPostBox = createAsyncThunk(
   "GET_POST",
-  async (payload, thunkAPI) => {
+  async ({ num, page }, thunkAPI) => {
     try {
       const { data } = await instance.get(
-        `/posts?categoryId=${payload}&page=1`
+        `/posts?categoryId=${num}&page=${page}`
       );
-      return thunkAPI.fulfillWithValue(data);
+      return thunkAPI.fulfillWithValue({ ...data, num });
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -100,6 +100,8 @@ export const __likeHeart = createAsyncThunk(
 const initialState = {
   postList: [],
   post: {},
+  pagesNum: 0,
+  categoryId: 0,
   isLoading: false,
   like: false,
 };
@@ -116,6 +118,8 @@ const postSlice = createSlice({
       .addCase(__getPostBox.fulfilled, (state, action) => {
         state.isLoading = false;
         state.postList = action.payload.posts;
+        state.pagesNum = action.payload.pagesNum;
+        state.categoryId = action.payload.num;
       })
       .addCase(__getPostBox.rejected, (state, action) => {
         state.isLoading = false;
