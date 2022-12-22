@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { __deleteComment, __patchComment } from "../redux/modules/commentSlice";
+import styled from "styled-components";
 
 const CommentList = ({ id, el }) => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const CommentList = ({ id, el }) => {
       <div>
         {isEditing && (
           <>
-            <input
+            <UpdateCommentInput
               onChange={(e) => {
                 setInputChange(e.target.value);
               }}
@@ -64,5 +65,19 @@ const CommentList = ({ id, el }) => {
     </>
   );
 };
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 800px;
+  height: 100%;
+  border-top: 1.5px solid black;
+`;
+const UpdateCommentInput = styled.input`
+  width: 100%;
+  height: 30px;
+  border: transparent;
+  border-radius: 5px;
+`;
 
 export default CommentList;
