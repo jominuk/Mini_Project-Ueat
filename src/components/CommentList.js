@@ -7,27 +7,22 @@ import { __deleteComment, __patchComment } from "../redux/modules/commentSlice";
 const CommentList = ({ id, el }) => {
   const dispatch = useDispatch();
   const { commentList } = useSelector((state) => state.commentPost);
-  console.log(
-    "🚀 ~ file: CommentList.js:10 ~ CommentList ~ commentList",
-    commentList
-  );
-
-  const comm = commentList.find((item) => {
-    return item.id === parseInt(id);
-  });
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const [inputChange, setInputChange] = useState({ comment: "" });
+  const [inputChange, setInputChange] = useState("");
 
-  const delClickHandler = () => {
-    dispatch(__deleteComment({}));
+  const delClickHandler = async (id) => {
+    const bb = await dispatch(__deleteComment(id));
+    if (typeof bb.payload !== Number) {
+      alert("다른 계정의 댓글을 지울 수 없습니다");
+    }
   };
-  const toggleEditing = () => {
+  const toggleEditing = (a) => {
     setIsEditing((prev) => !prev);
   };
-  const EditClickHandler = () => {
-    dispatch(__patchComment({ id, comment: inputChange.comment }));
+  const EditClickHandler = (ff) => {
+    dispatch(__patchComment(ff));
   };
   return (
     <>
@@ -39,8 +34,9 @@ const CommentList = ({ id, el }) => {
           <>
             <input
               onChange={(e) => {
-                setInputChange({ ...inputChange, comment: e.target.value });
+                setInputChange(e.target.value);
               }}
+              value={inputChange}
               type="text"
               placeholder="댓글 수정란"
             />
@@ -48,14 +44,18 @@ const CommentList = ({ id, el }) => {
         )}
         <button
           type="button"
-          onClick={isEditing ? toggleEditing : () => delClickHandler(id)}
+          onClick={
+            isEditing ? toggleEditing : () => delClickHandler(el.commentId)
+          }
         >
           {isEditing ? "취소하기" : "삭제하기"}
         </button>
         <button
           type="button"
           onClick={
-            isEditing ? () => EditClickHandler(inputChange) : toggleEditing
+            isEditing
+              ? () => EditClickHandler({ inputChange, id: el.commentId })
+              : toggleEditing
           }
         >
           {isEditing ? "완료하기" : "수정하기"}
