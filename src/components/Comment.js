@@ -1,12 +1,31 @@
 import React from "react";
 import styled from "styled-components";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { __postComment } from "../redux/modules/commentSlice";
 
-const Comment = () => {
+const Comment = ({ id }) => {
+  const dispatch = useDispatch();
+
+  const [inputC, setInputC] = useState({ comment: "" });
+  const inputHandler = (e) => {
+    const { name, value } = e.target;
+    setInputC({ ...inputC, [name]: value });
+  };
+
+  useEffect(() => {}, [dispatch]);
+
+  const onClickHandler = () => {
+    dispatch(__postComment({ comment: inputC.comment, id }));
+    // setInput([...todos, input]);
+  };
+
   return (
     <div>
       <StCommentBox>
-        <input />
-        <button> 작성 </button>
+        <input type="text" name="comment" onChange={inputHandler} />
+        <button onClick={onClickHandler}> 작성 </button>
       </StCommentBox>
     </div>
   );

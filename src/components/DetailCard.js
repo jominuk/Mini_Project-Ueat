@@ -6,25 +6,31 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Comment from "./Comment";
 import HeartButton from "./HeartButton";
+import CommentList from "./CommentList";
+import { __getComment } from "../redux/modules/commentSlice";
 
 const DetailCard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { id } = useParams();
   const detailParams = useParams();
 
   const { post } = useSelector((state) => state.post);
-  console.log(post);
   // const nickname = useSelector((state) => state.nickCheck.nickname);
   // console.log(nickname);
+  const { commentList } = useSelector((state) => state.commentPost);
 
   const DeleteButton = () => {
-    dispatch(__deletePost(detailParams));
+    dispatch(__deletePost(id));
   };
 
   useEffect(() => {
-    dispatch(__createGet(detailParams));
+    dispatch(__createGet(id));
   }, []);
+
+  useEffect(() => {
+    dispatch(__getComment(id));
+  }, [dispatch]);
 
   return (
     <>
@@ -44,8 +50,8 @@ const DetailCard = () => {
           </DetailNicknameCarrier>
 
           <DetailImageCarrier
-          // src={imageUrl}
-          // style={{ width: "300px", height: "320px" }}
+            src={post?.imageUrl}
+            style={{ width: "300px", height: "320px" }}
           />
 
           <HeartButton />
@@ -57,7 +63,12 @@ const DetailCard = () => {
           <DetailButtonDEL onClick={DeleteButton}> Delete </DetailButtonDEL>
         </div>
       </div>
-      <Comment />
+      <Comment id={id} />
+      {commentList?.map((el, i) => {
+        return (
+          <CommentList key={`main-comment-${i}`} id={id} el={el}></CommentList>
+        );
+      })}
     </>
   );
 };
