@@ -58,8 +58,6 @@ const DetailCard = () => {
     console.log(input);
   };
 
-  // const DeleteButton = () => {
-  //   dispatch(__deletePost(id));
   const DeleteButton = async () => {
     const deleteComplte = await dispatch(__deletePost(id));
     if (deleteComplte.payload !== "") {
@@ -74,7 +72,7 @@ const DetailCard = () => {
 
   useEffect(() => {
     dispatch(__getComment(id));
-  }, []);
+  }, [dispatch]);
 
   return id === edit ? (
     <>
@@ -102,7 +100,7 @@ const DetailCard = () => {
 
           <DetailImageCarrier
             src={post?.imageUrl}
-            style={{ width: "300px", height: "320px" }}
+            style={{ width: "320px", height: "230px" }}
           />
 
           <HeartButton />

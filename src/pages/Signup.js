@@ -118,16 +118,7 @@ const Signup = () => {
       <LeftImage></LeftImage>
       <Main>
         <Stdiv>
-          <StBackButton>
-            <StyledButton
-              onClick={() => {
-                navigate("/log");
-              }}
-            >
-              {" "}
-              이전으로{" "}
-            </StyledButton>
-          </StBackButton>
+          <StBackButton></StBackButton>
           <StHead>회원가입</StHead>
           <div>
             <StyledInput
@@ -183,7 +174,13 @@ const Signup = () => {
             <StyledButton onClick={onClickHandler} type="submit">
               SignUp
             </StyledButton>
-            <StyledButton type="submit">SignIn</StyledButton>
+            <StyledButton
+              onClick={() => {
+                navigate("/log");
+              }}
+            >
+              Back
+            </StyledButton>
           </ButtonArea>
         </Stdiv>
       </Main>

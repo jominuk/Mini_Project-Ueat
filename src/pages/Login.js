@@ -59,6 +59,7 @@ const Login = () => {
       <LeftImage></LeftImage>
       <Main>
         <Stdiv>
+          <StyledButton onClick={() => navigate("/")}> 홈 버튼 </StyledButton>
           <StHead>로그인</StHead>
           <StyledInput
             placeholder="Email"
