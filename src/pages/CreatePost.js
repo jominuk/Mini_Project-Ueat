@@ -23,11 +23,11 @@ const CreatePost = () => {
   const [Open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
 
-  useEffect(() => {
-    if (!login) {
-      navigate("/log");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!login) {
+  //     navigate("/log");
+  //   }
+  // }, []);
 
   const selectMenu = () => setOpen(!Open);
   const options = ["한식", "중식", "일식", "양식", "기타"];
@@ -52,7 +52,7 @@ const CreatePost = () => {
     formData.append("categoryId", options.indexOf(selectedOption));
     for (let key of formData.keys()) {
     }
-    const a = await dispatch(__createPost(formData));
+    const a = dispatch(__createPost(formData));
     if (a.payload.message === "작성 완료") {
       alert("작성 완료");
       navigate("/main/0");
@@ -93,7 +93,7 @@ const CreatePost = () => {
             placeholder="내용"
             onChange={(e) => setContent(e.target.value)}
           />
-          <Upload htmlFor="file">파일 업로드</Upload>{" "}
+          <Upload htmlFor="file">파일 업로드</Upload>
           <div>
             <StyledInput
               type="file"
@@ -109,8 +109,7 @@ const CreatePost = () => {
                 navigate("/main/0");
               }}
             >
-              {" "}
-              홈으로{" "}
+              홈으로
             </StyledButton>
 
             <StyledButton> 추가하기 </StyledButton>
@@ -157,7 +156,7 @@ const Upload = styled.label`
   background-color: #34495e;
   border-radius: 4px;
   color: white;
-  width: 80px;
+  width: 100px;
   cursor: pointer;
   &:hover {
     background-color: #2c3e50;
@@ -177,6 +176,7 @@ const StDropDownHeader = styled.div`
   color: #34495e;
   border-radius: 3px;
   border: 2px solid #34495e;
+  cursor: pointer;
 `;
 
 const StDropDownListContainer = styled.div`

@@ -18,7 +18,6 @@ const Comment = ({ id }) => {
 
   const onClickHandler = () => {
     dispatch(__postComment({ comment: inputC.comment, id }));
-    // setInput([...todos, input]);
   };
 
   return (
@@ -50,14 +49,10 @@ const CommentBoxStruc = styled.div`
   height: 50%;
 `;
 const StCommentBox = styled.div`
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
   margin: 60px;
   width: 100%;
   border: 2px solid moccasin;
   border-radius: 10px;
-  /* margin: 8px 0; */
   outline: none;
   padding: 8px;
   box-sizing: border-box;
