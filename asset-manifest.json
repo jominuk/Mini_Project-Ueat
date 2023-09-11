@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Mini_Project-Ueat/static/css/main.e6c13ad2.css",
+    "main.js": "/Mini_Project-Ueat/static/js/main.65bfbaa1.js",
+    "static/js/787.c344034c.chunk.js": "/Mini_Project-Ueat/static/js/787.c344034c.chunk.js",
+    "static/media/logo.png": "/Mini_Project-Ueat/static/media/logo.4ef9e8f50800cba561b5.png",
+    "index.html": "/Mini_Project-Ueat/index.html",
+    "main.e6c13ad2.css.map": "/Mini_Project-Ueat/static/css/main.e6c13ad2.css.map",
+    "main.65bfbaa1.js.map": "/Mini_Project-Ueat/static/js/main.65bfbaa1.js.map",
+    "787.c344034c.chunk.js.map": "/Mini_Project-Ueat/static/js/787.c344034c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.65bfbaa1.js"
+  ]
+}
